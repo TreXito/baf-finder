@@ -257,7 +257,7 @@ async fn handle(
     }
 
     // POST /cofl-purchase — baf-backend calls this whenever the COFL-benchmark
-    // account (baf_deer_raph, running Coflnet's own finder, not ours) actually
+    // account (a separate instance running Coflnet's own finder, not ours) actually
     // buys something. We can't match on auction uuid (pageflipper's browse-crawl
     // has no uuid for a listing before it hits the public dump), so the join key
     // is (item name, exact BIN price) — good enough since a collision would need

@@ -2288,8 +2288,18 @@ mod tests {
                 .await
                 .unwrap();
             // Emptying the key file must lock the door, not leave it ajar.
+            // The reload gate is the file's MTIME: on coarse-mtime filesystems
+            // (seen on container overlayfs) a rewrite can land in the same
+            // tick as the setup load and read as unchanged. Re-write on a
+            // fresh tick until the gate notices, then assert on what loaded.
             std::fs::write(h._dir.join("keys.json"), r#"{"keys":[]}"#).unwrap();
-            assert_eq!(h.hub.keys.reload_if_changed(false), Some(0));
+            let mut reloaded = h.hub.keys.reload_if_changed(false);
+            while reloaded.is_none() {
+                std::thread::sleep(Duration::from_millis(1100));
+                std::fs::write(h._dir.join("keys.json"), r#"{"keys":[]}"#).unwrap();
+                reloaded = h.hub.keys.reload_if_changed(false);
+            }
+            assert_eq!(reloaded, Some(0));
             assert!(h.hub.keys.lookup(&h.secret).is_none());
             assert!(
                 connect(port, &format!("/{}", h.secret)).await.is_err(),

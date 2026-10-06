@@ -1992,7 +1992,7 @@ fn held_tags(bot: &str) -> Option<Vec<(String, f64)>> {
 /// 🔥 The position records which bot we ASKED to buy, which is not the same as
 /// which bot is holding the goods. One mod instance runs two accounts and the
 /// name on the socket is whichever is currently primary, so a position booked
-/// under `argamer1014` can end up as stock in `zShadowReaper_`'s inventory.
+/// under `bot_one` can end up as stock in `bot_two_`'s inventory.
 /// Measured on prod 2026-08-16: of the bazaar tags in one bot's inventory, 2 of
 /// 6 had positions attributed to a DIFFERENT bot, and both of those bots were
 /// offline (`ROSTER ... HOLDING POSITIONS BUT NOT CONNECTED`).
@@ -3057,12 +3057,12 @@ mod tests {
         let _holdings_guard = HOLDINGS_TEST_LOCK.lock().unwrap();
         holdings().lock().unwrap().clear();
         holdings().lock().unwrap().insert(
-            "zShadowReaper_".into(),
+            "bot_two_".into(),
             HashMap::from([("TIGER_SHARK_TOOTH".to_string(), 11.0)]),
         );
         assert_eq!(
             bot_holding("TIGER_SHARK_TOOTH", 11.0).as_deref(),
-            Some("zShadowReaper_")
+            Some("bot_two_")
         );
         // Not enough units is not a holder.
         assert_eq!(bot_holding("TIGER_SHARK_TOOTH", 12.0), None);
