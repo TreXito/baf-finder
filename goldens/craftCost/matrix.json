@@ -1,0 +1,3171 @@
+{
+  "module": "craftCost",
+  "fns": [
+    "craftCeiling",
+    "starMaterialCost"
+  ],
+  "pinnedNowMs": 1783941749000,
+  "source": {
+    "snapshot": "snap.sqlite",
+    "refMaxAgeDays": 7,
+    "cutoff": 1783336949,
+    "nonPetSql": "SELECT price, sold_at, seller, attrs FROM sold WHERE item_id IN ('SUPERIOR_DRAGON_CHESTPLATE','TERROR_HELMET','TERROR_CHESTPLATE','TERROR_LEGGINGS','TERROR_BOOTS','HYPERION','ASTRAEA','SCYLLA','VALKYRIE','TERMINATOR','NECRON_HANDLE','DIVAN_CHESTPLATE','LIVID_DAGGER','SHADOW_ASSASSIN_CHESTPLATE','AURORA_CHESTPLATE','POWER_WITHER_CHESTPLATE','DAEDALUS_AXE','JUJU_SHORTBOW','MAGMA_LORD_CHESTPLATE','FERMENTO_CHESTPLATE','GLACITE_HELMET','DWARF_TURTLE_SHELMET') AND sold_at >= 1783336949 ORDER BY auction_id",
+    "petSql": "SELECT price, sold_at, seller, attrs FROM sold WHERE item_id = 'PET' AND sold_at >= 1783336949 ORDER BY auction_id LIMIT 1500",
+    "itemIds": [
+      "SUPERIOR_DRAGON_CHESTPLATE",
+      "TERROR_HELMET",
+      "TERROR_CHESTPLATE",
+      "TERROR_LEGGINGS",
+      "TERROR_BOOTS",
+      "HYPERION",
+      "ASTRAEA",
+      "SCYLLA",
+      "VALKYRIE",
+      "TERMINATOR",
+      "NECRON_HANDLE",
+      "DIVAN_CHESTPLATE",
+      "LIVID_DAGGER",
+      "SHADOW_ASSASSIN_CHESTPLATE",
+      "AURORA_CHESTPLATE",
+      "POWER_WITHER_CHESTPLATE",
+      "DAEDALUS_AXE",
+      "JUJU_SHORTBOW",
+      "MAGMA_LORD_CHESTPLATE",
+      "FERMENTO_CHESTPLATE",
+      "GLACITE_HELMET",
+      "DWARF_TURTLE_SHELMET"
+    ],
+    "petCap": 1500,
+    "rowCount": 30942,
+    "nonPetCount": 29442,
+    "petCount": 1500,
+    "refsSha256": "4137a29bae7c50e2b5de3baf05c864ecd0fe88f64dbb87c1da86aae45814ee16",
+    "refsFile": "priceIndex/refs.jsonl",
+    "note": "craftCeiling over real starred bases (Hyperion/Necron swords/dungeon armor) across star sweeps incl. recomb+scroll variants, plus unknown/pet/book non-cappable classes; starMaterialCost(0..12). Index built from the fixed slice; bazaar fixture installed (master stars + Necron ingredients priced)."
+  },
+  "bazaar": {
+    "DIAMONITE": 1200000,
+    "DIVAN_POWDER_COATING": 5000000,
+    "DRAGON_CLAW": 25000000,
+    "DRAGON_HORN": 30000000,
+    "ENCHANTMENT_GROWTH_5": 25000,
+    "ENCHANTMENT_GROWTH_6": 4000000,
+    "ENCHANTMENT_PROTECTION_5": 25000,
+    "ENCHANTMENT_PROTECTION_6": 4500000,
+    "ENCHANTMENT_SHARPNESS_5": 40000,
+    "ENCHANTMENT_ULTIMATE_LEGION_5": 12000000,
+    "ENCHANTMENT_ULTIMATE_ONE_FOR_ALL_1": 30000000,
+    "ENCHANTMENT_ULTIMATE_WISE_5": 3000000,
+    "ENDSTONE_GEODE": 700000,
+    "ETHERWARP_MERGER": 12000000,
+    "FARMING_FOR_DUMMIES": 900000,
+    "FIFTH_MASTER_STAR": 165000000,
+    "FIRST_MASTER_STAR": 15000000,
+    "FLAWLESS_AMETHYST_GEM": 500000,
+    "FLAWLESS_JASPER_GEM": 3500000,
+    "FLAWLESS_RUBY_GEM": 3200000,
+    "FLAWLESS_SAPPHIRE_GEM": 1200000,
+    "FOURTH_MASTER_STAR": 65000000,
+    "FUMING_POTATO_BOOK": 1100000,
+    "GIANT_FRAGMENT_LASER": 1400000,
+    "HOT_POTATO_BOOK": 60000,
+    "IMPLOSION_SCROLL": 120000000,
+    "JALAPENO_BOOK": 700000,
+    "MANA_DISINTEGRATOR": 120000,
+    "MOLTEN_CUBE": 900000,
+    "NECROMANCER_BROOCH": 22000000,
+    "PERFECT_AMETHYST_GEM": 8000000,
+    "PERFECT_JASPER_GEM": 60000000,
+    "PERFECT_RUBY_GEM": 55000000,
+    "PERFECT_SAPPHIRE_GEM": 20000000,
+    "PET_ITEM_LUCKY_CLOVER": 1500000,
+    "PET_ITEM_QUICK_CLAW": 900000,
+    "POLARVOID_BOOK": 250000,
+    "PRECURSOR_GEAR": 8000000,
+    "RECOMBOBULATOR_3000": 6000000,
+    "RED_SCARF": 3000000,
+    "SECOND_MASTER_STAR": 22000000,
+    "SHADOW_WARP_SCROLL": 130000000,
+    "SIL_EX": 300000,
+    "TALISMAN_ENRICHMENT_MAGIC_FIND": 4000000,
+    "TALISMAN_ENRICHMENT_WALK_SPEED": 3500000,
+    "THE_ART_OF_PEACE": 12000000,
+    "THE_ART_OF_WAR": 800000,
+    "THIRD_MASTER_STAR": 36000000,
+    "TRANSMISSION_TUNER": 400000,
+    "WET_BOOK": 800000,
+    "WITHER_BLOOD": 40000000,
+    "WITHER_CATALYST": 1400000,
+    "WITHER_SHIELD_SCROLL": 110000000,
+    "WOOD_SINGULARITY": 3000000
+  },
+  "starMaterialCostTable": [
+    {
+      "level": 0,
+      "cost": 0
+    },
+    {
+      "level": 1,
+      "cost": 1000000
+    },
+    {
+      "level": 2,
+      "cost": 2000000
+    },
+    {
+      "level": 3,
+      "cost": 3000000
+    },
+    {
+      "level": 4,
+      "cost": 4000000
+    },
+    {
+      "level": 5,
+      "cost": 5000000
+    },
+    {
+      "level": 6,
+      "cost": 21000000
+    },
+    {
+      "level": 7,
+      "cost": 44000000
+    },
+    {
+      "level": 8,
+      "cost": 81000000
+    },
+    {
+      "level": 9,
+      "cost": 147000000
+    },
+    {
+      "level": 10,
+      "cost": 313000000
+    },
+    {
+      "level": 11,
+      "cost": 314000000
+    },
+    {
+      "level": 12,
+      "cost": 315000000
+    }
+  ],
+  "queryCount": 84,
+  "entries": [
+    {
+      "input": {
+        "id": "HYPERION",
+        "attributes": {},
+        "enchantments": {
+          "bane_of_arthropods": 6,
+          "impaling": 5,
+          "luck": 6,
+          "critical": 6,
+          "cleave": 5,
+          "smite": 6,
+          "looting": 4,
+          "syphon": 3,
+          "scavenger": 3,
+          "ender_slayer": 6,
+          "fire_aspect": 3,
+          "experience": 4,
+          "vampirism": 5,
+          "execute": 5,
+          "giant_killer": 5,
+          "first_strike": 4,
+          "dragon_hunter": 5,
+          "thunderlord": 6,
+          "sharpness": 5,
+          "cubism": 5,
+          "lethality": 6
+        },
+        "scrolls": [],
+        "reforge": "heroic",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": null,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "e6ac465d-5c30-4f02-84c9-bb0d773b4bcb"
+      },
+      "output": {
+        "baseKey": "HYPERION",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 512000000
+      }
+    },
+    {
+      "input": {
+        "id": "HYPERION",
+        "attributes": {},
+        "enchantments": {
+          "bane_of_arthropods": 6,
+          "impaling": 5,
+          "luck": 6,
+          "critical": 6,
+          "cleave": 5,
+          "smite": 6,
+          "looting": 4,
+          "syphon": 3,
+          "scavenger": 3,
+          "ender_slayer": 6,
+          "fire_aspect": 3,
+          "experience": 4,
+          "vampirism": 5,
+          "execute": 5,
+          "giant_killer": 5,
+          "first_strike": 4,
+          "dragon_hunter": 5,
+          "thunderlord": 6,
+          "sharpness": 5,
+          "cubism": 5,
+          "lethality": 6
+        },
+        "scrolls": [],
+        "reforge": "heroic",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 0,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "e6ac465d-5c30-4f02-84c9-bb0d773b4bcb"
+      },
+      "output": {
+        "baseKey": "HYPERION*0",
+        "craftCeiling": null,
+        "zeroStarBaseline": 528000000,
+        "baseValueForId": 512000000
+      }
+    },
+    {
+      "input": {
+        "id": "HYPERION",
+        "attributes": {},
+        "enchantments": {
+          "bane_of_arthropods": 6,
+          "impaling": 5,
+          "luck": 6,
+          "critical": 6,
+          "cleave": 5,
+          "smite": 6,
+          "looting": 4,
+          "syphon": 3,
+          "scavenger": 3,
+          "ender_slayer": 6,
+          "fire_aspect": 3,
+          "experience": 4,
+          "vampirism": 5,
+          "execute": 5,
+          "giant_killer": 5,
+          "first_strike": 4,
+          "dragon_hunter": 5,
+          "thunderlord": 6,
+          "sharpness": 5,
+          "cubism": 5,
+          "lethality": 6
+        },
+        "scrolls": [],
+        "reforge": "heroic",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 1,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "e6ac465d-5c30-4f02-84c9-bb0d773b4bcb"
+      },
+      "output": {
+        "baseKey": "HYPERION*1",
+        "craftCeiling": 581900000,
+        "zeroStarBaseline": 528000000,
+        "baseValueForId": 512000000
+      }
+    },
+    {
+      "input": {
+        "id": "HYPERION",
+        "attributes": {},
+        "enchantments": {
+          "bane_of_arthropods": 6,
+          "impaling": 5,
+          "luck": 6,
+          "critical": 6,
+          "cleave": 5,
+          "smite": 6,
+          "looting": 4,
+          "syphon": 3,
+          "scavenger": 3,
+          "ender_slayer": 6,
+          "fire_aspect": 3,
+          "experience": 4,
+          "vampirism": 5,
+          "execute": 5,
+          "giant_killer": 5,
+          "first_strike": 4,
+          "dragon_hunter": 5,
+          "thunderlord": 6,
+          "sharpness": 5,
+          "cubism": 5,
+          "lethality": 6
+        },
+        "scrolls": [],
+        "reforge": "heroic",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 5,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "e6ac465d-5c30-4f02-84c9-bb0d773b4bcb"
+      },
+      "output": {
+        "baseKey": "HYPERION*5",
+        "craftCeiling": 586300000,
+        "zeroStarBaseline": 528000000,
+        "baseValueForId": 512000000
+      }
+    },
+    {
+      "input": {
+        "id": "HYPERION",
+        "attributes": {},
+        "enchantments": {
+          "bane_of_arthropods": 6,
+          "impaling": 5,
+          "luck": 6,
+          "critical": 6,
+          "cleave": 5,
+          "smite": 6,
+          "looting": 4,
+          "syphon": 3,
+          "scavenger": 3,
+          "ender_slayer": 6,
+          "fire_aspect": 3,
+          "experience": 4,
+          "vampirism": 5,
+          "execute": 5,
+          "giant_killer": 5,
+          "first_strike": 4,
+          "dragon_hunter": 5,
+          "thunderlord": 6,
+          "sharpness": 5,
+          "cubism": 5,
+          "lethality": 6
+        },
+        "scrolls": [],
+        "reforge": "heroic",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 6,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "e6ac465d-5c30-4f02-84c9-bb0d773b4bcb"
+      },
+      "output": {
+        "baseKey": "HYPERION*6",
+        "craftCeiling": 603900000,
+        "zeroStarBaseline": 528000000,
+        "baseValueForId": 512000000
+      }
+    },
+    {
+      "input": {
+        "id": "HYPERION",
+        "attributes": {},
+        "enchantments": {
+          "bane_of_arthropods": 6,
+          "impaling": 5,
+          "luck": 6,
+          "critical": 6,
+          "cleave": 5,
+          "smite": 6,
+          "looting": 4,
+          "syphon": 3,
+          "scavenger": 3,
+          "ender_slayer": 6,
+          "fire_aspect": 3,
+          "experience": 4,
+          "vampirism": 5,
+          "execute": 5,
+          "giant_killer": 5,
+          "first_strike": 4,
+          "dragon_hunter": 5,
+          "thunderlord": 6,
+          "sharpness": 5,
+          "cubism": 5,
+          "lethality": 6
+        },
+        "scrolls": [],
+        "reforge": "heroic",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 8,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "e6ac465d-5c30-4f02-84c9-bb0d773b4bcb"
+      },
+      "output": {
+        "baseKey": "HYPERION*8",
+        "craftCeiling": 669900000,
+        "zeroStarBaseline": 528000000,
+        "baseValueForId": 512000000
+      }
+    },
+    {
+      "input": {
+        "id": "HYPERION",
+        "attributes": {},
+        "enchantments": {
+          "bane_of_arthropods": 6,
+          "impaling": 5,
+          "luck": 6,
+          "critical": 6,
+          "cleave": 5,
+          "smite": 6,
+          "looting": 4,
+          "syphon": 3,
+          "scavenger": 3,
+          "ender_slayer": 6,
+          "fire_aspect": 3,
+          "experience": 4,
+          "vampirism": 5,
+          "execute": 5,
+          "giant_killer": 5,
+          "first_strike": 4,
+          "dragon_hunter": 5,
+          "thunderlord": 6,
+          "sharpness": 5,
+          "cubism": 5,
+          "lethality": 6
+        },
+        "scrolls": [],
+        "reforge": "heroic",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 10,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "e6ac465d-5c30-4f02-84c9-bb0d773b4bcb"
+      },
+      "output": {
+        "baseKey": "HYPERION*10",
+        "craftCeiling": 925100000.0000001,
+        "zeroStarBaseline": 528000000,
+        "baseValueForId": 512000000
+      }
+    },
+    {
+      "input": {
+        "id": "HYPERION",
+        "attributes": {},
+        "enchantments": {
+          "bane_of_arthropods": 6,
+          "impaling": 5,
+          "luck": 6,
+          "critical": 6,
+          "cleave": 5,
+          "smite": 6,
+          "looting": 4,
+          "syphon": 3,
+          "scavenger": 3,
+          "ender_slayer": 6,
+          "fire_aspect": 3,
+          "experience": 4,
+          "vampirism": 5,
+          "execute": 5,
+          "giant_killer": 5,
+          "first_strike": 4,
+          "dragon_hunter": 5,
+          "thunderlord": 6,
+          "sharpness": 5,
+          "cubism": 5,
+          "lethality": 6
+        },
+        "scrolls": [],
+        "reforge": "heroic",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 10,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "e6ac465d-5c30-4f02-84c9-bb0d773b4bcb"
+      },
+      "output": {
+        "baseKey": "HYPERION*10",
+        "craftCeiling": 925100000.0000001,
+        "zeroStarBaseline": 528000000,
+        "baseValueForId": 512000000
+      }
+    },
+    {
+      "input": {
+        "id": "HYPERION",
+        "attributes": {},
+        "enchantments": {
+          "bane_of_arthropods": 6,
+          "impaling": 5,
+          "luck": 6,
+          "critical": 6,
+          "cleave": 5,
+          "smite": 6,
+          "looting": 4,
+          "syphon": 3,
+          "scavenger": 3,
+          "ender_slayer": 6,
+          "fire_aspect": 3,
+          "experience": 4,
+          "vampirism": 5,
+          "execute": 5,
+          "giant_killer": 5,
+          "first_strike": 4,
+          "dragon_hunter": 5,
+          "thunderlord": 6,
+          "sharpness": 5,
+          "cubism": 5,
+          "lethality": 6
+        },
+        "scrolls": [
+          "IMPLOSION_SCROLL",
+          "SHADOW_WARP_SCROLL",
+          "WITHER_SHIELD_SCROLL"
+        ],
+        "reforge": "heroic",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 10,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "e6ac465d-5c30-4f02-84c9-bb0d773b4bcb"
+      },
+      "output": {
+        "baseKey": "HYPERION*10",
+        "craftCeiling": 1693505000.0000002,
+        "zeroStarBaseline": 1226550000,
+        "baseValueForId": 512000000
+      }
+    },
+    {
+      "input": {
+        "id": "VALKYRIE",
+        "attributes": {},
+        "enchantments": {
+          "impaling": 5,
+          "luck": 6,
+          "critical": 6,
+          "smite": 6,
+          "scavenger": 5,
+          "ender_slayer": 6,
+          "knockback": 2,
+          "fire_aspect": 3,
+          "experience": 4,
+          "life_steal": 4,
+          "giant_killer": 6,
+          "dragon_hunter": 5,
+          "venomous": 6,
+          "magmarizer": 5,
+          "thunderlord": 6,
+          "sharpness": 6,
+          "cubism": 5,
+          "lethality": 6,
+          "prosecute": 5,
+          "bane_of_arthropods": 6,
+          "cleave": 5,
+          "looting": 4,
+          "ultimate_soul_eater": 5,
+          "vampirism": 5,
+          "first_strike": 4,
+          "champion": 1
+        },
+        "scrolls": [],
+        "reforge": "withered",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": null,
+        "gemSlots": 2,
+        "gems": [
+          "FLAWLESS_JASPER",
+          "FLAWLESS_JASPER"
+        ],
+        "parts": [],
+        "extras": {
+          "art_of_war": 1,
+          "hpb": 10,
+          "fuming": 5
+        },
+        "pet": null,
+        "variant": "",
+        "itemUuid": "2d2ce149-12f3-42c2-ac4e-503b26fb1d3e"
+      },
+      "output": {
+        "baseKey": "VALKYRIE",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 509000000
+      }
+    },
+    {
+      "input": {
+        "id": "VALKYRIE",
+        "attributes": {},
+        "enchantments": {
+          "impaling": 5,
+          "luck": 6,
+          "critical": 6,
+          "smite": 6,
+          "scavenger": 5,
+          "ender_slayer": 6,
+          "knockback": 2,
+          "fire_aspect": 3,
+          "experience": 4,
+          "life_steal": 4,
+          "giant_killer": 6,
+          "dragon_hunter": 5,
+          "venomous": 6,
+          "magmarizer": 5,
+          "thunderlord": 6,
+          "sharpness": 6,
+          "cubism": 5,
+          "lethality": 6,
+          "prosecute": 5,
+          "bane_of_arthropods": 6,
+          "cleave": 5,
+          "looting": 4,
+          "ultimate_soul_eater": 5,
+          "vampirism": 5,
+          "first_strike": 4,
+          "champion": 1
+        },
+        "scrolls": [],
+        "reforge": "withered",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 0,
+        "gemSlots": 2,
+        "gems": [
+          "FLAWLESS_JASPER",
+          "FLAWLESS_JASPER"
+        ],
+        "parts": [],
+        "extras": {
+          "art_of_war": 1,
+          "hpb": 10,
+          "fuming": 5
+        },
+        "pet": null,
+        "variant": "",
+        "itemUuid": "2d2ce149-12f3-42c2-ac4e-503b26fb1d3e"
+      },
+      "output": {
+        "baseKey": "VALKYRIE*0",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 509000000
+      }
+    },
+    {
+      "input": {
+        "id": "VALKYRIE",
+        "attributes": {},
+        "enchantments": {
+          "impaling": 5,
+          "luck": 6,
+          "critical": 6,
+          "smite": 6,
+          "scavenger": 5,
+          "ender_slayer": 6,
+          "knockback": 2,
+          "fire_aspect": 3,
+          "experience": 4,
+          "life_steal": 4,
+          "giant_killer": 6,
+          "dragon_hunter": 5,
+          "venomous": 6,
+          "magmarizer": 5,
+          "thunderlord": 6,
+          "sharpness": 6,
+          "cubism": 5,
+          "lethality": 6,
+          "prosecute": 5,
+          "bane_of_arthropods": 6,
+          "cleave": 5,
+          "looting": 4,
+          "ultimate_soul_eater": 5,
+          "vampirism": 5,
+          "first_strike": 4,
+          "champion": 1
+        },
+        "scrolls": [],
+        "reforge": "withered",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 1,
+        "gemSlots": 2,
+        "gems": [
+          "FLAWLESS_JASPER",
+          "FLAWLESS_JASPER"
+        ],
+        "parts": [],
+        "extras": {
+          "art_of_war": 1,
+          "hpb": 10,
+          "fuming": 5
+        },
+        "pet": null,
+        "variant": "",
+        "itemUuid": "2d2ce149-12f3-42c2-ac4e-503b26fb1d3e"
+      },
+      "output": {
+        "baseKey": "VALKYRIE*1",
+        "craftCeiling": 630057994.5,
+        "zeroStarBaseline": null,
+        "baseValueForId": 509000000
+      }
+    },
+    {
+      "input": {
+        "id": "VALKYRIE",
+        "attributes": {},
+        "enchantments": {
+          "impaling": 5,
+          "luck": 6,
+          "critical": 6,
+          "smite": 6,
+          "scavenger": 5,
+          "ender_slayer": 6,
+          "knockback": 2,
+          "fire_aspect": 3,
+          "experience": 4,
+          "life_steal": 4,
+          "giant_killer": 6,
+          "dragon_hunter": 5,
+          "venomous": 6,
+          "magmarizer": 5,
+          "thunderlord": 6,
+          "sharpness": 6,
+          "cubism": 5,
+          "lethality": 6,
+          "prosecute": 5,
+          "bane_of_arthropods": 6,
+          "cleave": 5,
+          "looting": 4,
+          "ultimate_soul_eater": 5,
+          "vampirism": 5,
+          "first_strike": 4,
+          "champion": 1
+        },
+        "scrolls": [],
+        "reforge": "withered",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 5,
+        "gemSlots": 2,
+        "gems": [
+          "FLAWLESS_JASPER",
+          "FLAWLESS_JASPER"
+        ],
+        "parts": [],
+        "extras": {
+          "art_of_war": 1,
+          "hpb": 10,
+          "fuming": 5
+        },
+        "pet": null,
+        "variant": "",
+        "itemUuid": "2d2ce149-12f3-42c2-ac4e-503b26fb1d3e"
+      },
+      "output": {
+        "baseKey": "VALKYRIE*5",
+        "craftCeiling": 634457994.5,
+        "zeroStarBaseline": null,
+        "baseValueForId": 509000000
+      }
+    },
+    {
+      "input": {
+        "id": "VALKYRIE",
+        "attributes": {},
+        "enchantments": {
+          "impaling": 5,
+          "luck": 6,
+          "critical": 6,
+          "smite": 6,
+          "scavenger": 5,
+          "ender_slayer": 6,
+          "knockback": 2,
+          "fire_aspect": 3,
+          "experience": 4,
+          "life_steal": 4,
+          "giant_killer": 6,
+          "dragon_hunter": 5,
+          "venomous": 6,
+          "magmarizer": 5,
+          "thunderlord": 6,
+          "sharpness": 6,
+          "cubism": 5,
+          "lethality": 6,
+          "prosecute": 5,
+          "bane_of_arthropods": 6,
+          "cleave": 5,
+          "looting": 4,
+          "ultimate_soul_eater": 5,
+          "vampirism": 5,
+          "first_strike": 4,
+          "champion": 1
+        },
+        "scrolls": [],
+        "reforge": "withered",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 6,
+        "gemSlots": 2,
+        "gems": [
+          "FLAWLESS_JASPER",
+          "FLAWLESS_JASPER"
+        ],
+        "parts": [],
+        "extras": {
+          "art_of_war": 1,
+          "hpb": 10,
+          "fuming": 5
+        },
+        "pet": null,
+        "variant": "",
+        "itemUuid": "2d2ce149-12f3-42c2-ac4e-503b26fb1d3e"
+      },
+      "output": {
+        "baseKey": "VALKYRIE*6",
+        "craftCeiling": 652057994.5,
+        "zeroStarBaseline": null,
+        "baseValueForId": 509000000
+      }
+    },
+    {
+      "input": {
+        "id": "VALKYRIE",
+        "attributes": {},
+        "enchantments": {
+          "impaling": 5,
+          "luck": 6,
+          "critical": 6,
+          "smite": 6,
+          "scavenger": 5,
+          "ender_slayer": 6,
+          "knockback": 2,
+          "fire_aspect": 3,
+          "experience": 4,
+          "life_steal": 4,
+          "giant_killer": 6,
+          "dragon_hunter": 5,
+          "venomous": 6,
+          "magmarizer": 5,
+          "thunderlord": 6,
+          "sharpness": 6,
+          "cubism": 5,
+          "lethality": 6,
+          "prosecute": 5,
+          "bane_of_arthropods": 6,
+          "cleave": 5,
+          "looting": 4,
+          "ultimate_soul_eater": 5,
+          "vampirism": 5,
+          "first_strike": 4,
+          "champion": 1
+        },
+        "scrolls": [],
+        "reforge": "withered",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 8,
+        "gemSlots": 2,
+        "gems": [
+          "FLAWLESS_JASPER",
+          "FLAWLESS_JASPER"
+        ],
+        "parts": [],
+        "extras": {
+          "art_of_war": 1,
+          "hpb": 10,
+          "fuming": 5
+        },
+        "pet": null,
+        "variant": "",
+        "itemUuid": "2d2ce149-12f3-42c2-ac4e-503b26fb1d3e"
+      },
+      "output": {
+        "baseKey": "VALKYRIE*8",
+        "craftCeiling": 718057994.5,
+        "zeroStarBaseline": null,
+        "baseValueForId": 509000000
+      }
+    },
+    {
+      "input": {
+        "id": "VALKYRIE",
+        "attributes": {},
+        "enchantments": {
+          "impaling": 5,
+          "luck": 6,
+          "critical": 6,
+          "smite": 6,
+          "scavenger": 5,
+          "ender_slayer": 6,
+          "knockback": 2,
+          "fire_aspect": 3,
+          "experience": 4,
+          "life_steal": 4,
+          "giant_killer": 6,
+          "dragon_hunter": 5,
+          "venomous": 6,
+          "magmarizer": 5,
+          "thunderlord": 6,
+          "sharpness": 6,
+          "cubism": 5,
+          "lethality": 6,
+          "prosecute": 5,
+          "bane_of_arthropods": 6,
+          "cleave": 5,
+          "looting": 4,
+          "ultimate_soul_eater": 5,
+          "vampirism": 5,
+          "first_strike": 4,
+          "champion": 1
+        },
+        "scrolls": [],
+        "reforge": "withered",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 10,
+        "gemSlots": 2,
+        "gems": [
+          "FLAWLESS_JASPER",
+          "FLAWLESS_JASPER"
+        ],
+        "parts": [],
+        "extras": {
+          "art_of_war": 1,
+          "hpb": 10,
+          "fuming": 5
+        },
+        "pet": null,
+        "variant": "",
+        "itemUuid": "2d2ce149-12f3-42c2-ac4e-503b26fb1d3e"
+      },
+      "output": {
+        "baseKey": "VALKYRIE*10",
+        "craftCeiling": 973257994.5000001,
+        "zeroStarBaseline": null,
+        "baseValueForId": 509000000
+      }
+    },
+    {
+      "input": {
+        "id": "VALKYRIE",
+        "attributes": {},
+        "enchantments": {
+          "impaling": 5,
+          "luck": 6,
+          "critical": 6,
+          "smite": 6,
+          "scavenger": 5,
+          "ender_slayer": 6,
+          "knockback": 2,
+          "fire_aspect": 3,
+          "experience": 4,
+          "life_steal": 4,
+          "giant_killer": 6,
+          "dragon_hunter": 5,
+          "venomous": 6,
+          "magmarizer": 5,
+          "thunderlord": 6,
+          "sharpness": 6,
+          "cubism": 5,
+          "lethality": 6,
+          "prosecute": 5,
+          "bane_of_arthropods": 6,
+          "cleave": 5,
+          "looting": 4,
+          "ultimate_soul_eater": 5,
+          "vampirism": 5,
+          "first_strike": 4,
+          "champion": 1
+        },
+        "scrolls": [],
+        "reforge": "withered",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 10,
+        "gemSlots": 2,
+        "gems": [
+          "FLAWLESS_JASPER",
+          "FLAWLESS_JASPER"
+        ],
+        "parts": [],
+        "extras": {
+          "art_of_war": 1,
+          "hpb": 10,
+          "fuming": 5
+        },
+        "pet": null,
+        "variant": "",
+        "itemUuid": "2d2ce149-12f3-42c2-ac4e-503b26fb1d3e"
+      },
+      "output": {
+        "baseKey": "VALKYRIE*10",
+        "craftCeiling": 973257994.5000001,
+        "zeroStarBaseline": null,
+        "baseValueForId": 509000000
+      }
+    },
+    {
+      "input": {
+        "id": "VALKYRIE",
+        "attributes": {},
+        "enchantments": {
+          "impaling": 5,
+          "luck": 6,
+          "critical": 6,
+          "smite": 6,
+          "scavenger": 5,
+          "ender_slayer": 6,
+          "knockback": 2,
+          "fire_aspect": 3,
+          "experience": 4,
+          "life_steal": 4,
+          "giant_killer": 6,
+          "dragon_hunter": 5,
+          "venomous": 6,
+          "magmarizer": 5,
+          "thunderlord": 6,
+          "sharpness": 6,
+          "cubism": 5,
+          "lethality": 6,
+          "prosecute": 5,
+          "bane_of_arthropods": 6,
+          "cleave": 5,
+          "looting": 4,
+          "ultimate_soul_eater": 5,
+          "vampirism": 5,
+          "first_strike": 4,
+          "champion": 1
+        },
+        "scrolls": [
+          "IMPLOSION_SCROLL",
+          "SHADOW_WARP_SCROLL",
+          "WITHER_SHIELD_SCROLL"
+        ],
+        "reforge": "withered",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 10,
+        "gemSlots": 2,
+        "gems": [
+          "FLAWLESS_JASPER",
+          "FLAWLESS_JASPER"
+        ],
+        "parts": [],
+        "extras": {
+          "art_of_war": 1,
+          "hpb": 10,
+          "fuming": 5
+        },
+        "pet": null,
+        "variant": "",
+        "itemUuid": "2d2ce149-12f3-42c2-ac4e-503b26fb1d3e"
+      },
+      "output": {
+        "baseKey": "VALKYRIE*10",
+        "craftCeiling": 1369257994.5,
+        "zeroStarBaseline": null,
+        "baseValueForId": 509000000
+      }
+    },
+    {
+      "input": {
+        "id": "ASTRAEA",
+        "attributes": {},
+        "enchantments": {
+          "ultimate_wise": 5
+        },
+        "scrolls": [
+          "IMPLOSION_SCROLL",
+          "SHADOW_WARP_SCROLL",
+          "WITHER_SHIELD_SCROLL"
+        ],
+        "reforge": "heroic",
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": null,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "ASTRAEA",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 580000000
+      }
+    },
+    {
+      "input": {
+        "id": "ASTRAEA",
+        "attributes": {},
+        "enchantments": {
+          "ultimate_wise": 5
+        },
+        "scrolls": [
+          "IMPLOSION_SCROLL",
+          "SHADOW_WARP_SCROLL",
+          "WITHER_SHIELD_SCROLL"
+        ],
+        "reforge": "heroic",
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 0,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "ASTRAEA*0",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 580000000
+      }
+    },
+    {
+      "input": {
+        "id": "ASTRAEA",
+        "attributes": {},
+        "enchantments": {
+          "ultimate_wise": 5
+        },
+        "scrolls": [
+          "IMPLOSION_SCROLL",
+          "SHADOW_WARP_SCROLL",
+          "WITHER_SHIELD_SCROLL"
+        ],
+        "reforge": "heroic",
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 1,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "ASTRAEA*1",
+        "craftCeiling": 963379994.5000001,
+        "zeroStarBaseline": null,
+        "baseValueForId": 580000000
+      }
+    },
+    {
+      "input": {
+        "id": "ASTRAEA",
+        "attributes": {},
+        "enchantments": {
+          "ultimate_wise": 5
+        },
+        "scrolls": [
+          "IMPLOSION_SCROLL",
+          "SHADOW_WARP_SCROLL",
+          "WITHER_SHIELD_SCROLL"
+        ],
+        "reforge": "heroic",
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 5,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "ASTRAEA*5",
+        "craftCeiling": 967779994.5000001,
+        "zeroStarBaseline": null,
+        "baseValueForId": 580000000
+      }
+    },
+    {
+      "input": {
+        "id": "ASTRAEA",
+        "attributes": {},
+        "enchantments": {
+          "ultimate_wise": 5
+        },
+        "scrolls": [
+          "IMPLOSION_SCROLL",
+          "SHADOW_WARP_SCROLL",
+          "WITHER_SHIELD_SCROLL"
+        ],
+        "reforge": "heroic",
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 6,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "ASTRAEA*6",
+        "craftCeiling": 985379994.5000001,
+        "zeroStarBaseline": null,
+        "baseValueForId": 580000000
+      }
+    },
+    {
+      "input": {
+        "id": "ASTRAEA",
+        "attributes": {},
+        "enchantments": {
+          "ultimate_wise": 5
+        },
+        "scrolls": [
+          "IMPLOSION_SCROLL",
+          "SHADOW_WARP_SCROLL",
+          "WITHER_SHIELD_SCROLL"
+        ],
+        "reforge": "heroic",
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 8,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "ASTRAEA*8",
+        "craftCeiling": 1051379994.5000001,
+        "zeroStarBaseline": null,
+        "baseValueForId": 580000000
+      }
+    },
+    {
+      "input": {
+        "id": "ASTRAEA",
+        "attributes": {},
+        "enchantments": {
+          "ultimate_wise": 5
+        },
+        "scrolls": [
+          "IMPLOSION_SCROLL",
+          "SHADOW_WARP_SCROLL",
+          "WITHER_SHIELD_SCROLL"
+        ],
+        "reforge": "heroic",
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 10,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "ASTRAEA*10",
+        "craftCeiling": 1306579994.5,
+        "zeroStarBaseline": null,
+        "baseValueForId": 580000000
+      }
+    },
+    {
+      "input": {
+        "id": "ASTRAEA",
+        "attributes": {},
+        "enchantments": {
+          "ultimate_wise": 5
+        },
+        "scrolls": [
+          "IMPLOSION_SCROLL",
+          "SHADOW_WARP_SCROLL",
+          "WITHER_SHIELD_SCROLL"
+        ],
+        "reforge": "heroic",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 10,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "ASTRAEA*10",
+        "craftCeiling": 1313179994.5,
+        "zeroStarBaseline": null,
+        "baseValueForId": 580000000
+      }
+    },
+    {
+      "input": {
+        "id": "ASTRAEA",
+        "attributes": {},
+        "enchantments": {
+          "ultimate_wise": 5
+        },
+        "scrolls": [
+          "IMPLOSION_SCROLL",
+          "SHADOW_WARP_SCROLL",
+          "WITHER_SHIELD_SCROLL"
+        ],
+        "reforge": "heroic",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 10,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "ASTRAEA*10",
+        "craftCeiling": 1313179994.5,
+        "zeroStarBaseline": null,
+        "baseValueForId": 580000000
+      }
+    },
+    {
+      "input": {
+        "id": "SCYLLA",
+        "attributes": {},
+        "enchantments": {
+          "bane_of_arthropods": 6,
+          "impaling": 5,
+          "luck": 5,
+          "critical": 6,
+          "cleave": 5,
+          "looting": 3,
+          "smite": 5,
+          "syphon": 3,
+          "scavenger": 3,
+          "ender_slayer": 5,
+          "vampirism": 5,
+          "experience": 3,
+          "execute": 5,
+          "giant_killer": 6,
+          "first_strike": 4,
+          "venomous": 5,
+          "dragon_hunter": 5,
+          "sharpness": 6,
+          "cubism": 5,
+          "champion": 10,
+          "lethality": 6
+        },
+        "scrolls": [],
+        "reforge": "fabled",
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": null,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {
+          "hpb": 10
+        },
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "SCYLLA",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "SCYLLA",
+        "attributes": {},
+        "enchantments": {
+          "bane_of_arthropods": 6,
+          "impaling": 5,
+          "luck": 5,
+          "critical": 6,
+          "cleave": 5,
+          "looting": 3,
+          "smite": 5,
+          "syphon": 3,
+          "scavenger": 3,
+          "ender_slayer": 5,
+          "vampirism": 5,
+          "experience": 3,
+          "execute": 5,
+          "giant_killer": 6,
+          "first_strike": 4,
+          "venomous": 5,
+          "dragon_hunter": 5,
+          "sharpness": 6,
+          "cubism": 5,
+          "champion": 10,
+          "lethality": 6
+        },
+        "scrolls": [],
+        "reforge": "fabled",
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 0,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {
+          "hpb": 10
+        },
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "SCYLLA*0",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "SCYLLA",
+        "attributes": {},
+        "enchantments": {
+          "bane_of_arthropods": 6,
+          "impaling": 5,
+          "luck": 5,
+          "critical": 6,
+          "cleave": 5,
+          "looting": 3,
+          "smite": 5,
+          "syphon": 3,
+          "scavenger": 3,
+          "ender_slayer": 5,
+          "vampirism": 5,
+          "experience": 3,
+          "execute": 5,
+          "giant_killer": 6,
+          "first_strike": 4,
+          "venomous": 5,
+          "dragon_hunter": 5,
+          "sharpness": 6,
+          "cubism": 5,
+          "champion": 10,
+          "lethality": 6
+        },
+        "scrolls": [],
+        "reforge": "fabled",
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 1,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {
+          "hpb": 10
+        },
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "SCYLLA*1",
+        "craftCeiling": 592327994.5,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "SCYLLA",
+        "attributes": {},
+        "enchantments": {
+          "bane_of_arthropods": 6,
+          "impaling": 5,
+          "luck": 5,
+          "critical": 6,
+          "cleave": 5,
+          "looting": 3,
+          "smite": 5,
+          "syphon": 3,
+          "scavenger": 3,
+          "ender_slayer": 5,
+          "vampirism": 5,
+          "experience": 3,
+          "execute": 5,
+          "giant_killer": 6,
+          "first_strike": 4,
+          "venomous": 5,
+          "dragon_hunter": 5,
+          "sharpness": 6,
+          "cubism": 5,
+          "champion": 10,
+          "lethality": 6
+        },
+        "scrolls": [],
+        "reforge": "fabled",
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 5,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {
+          "hpb": 10
+        },
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "SCYLLA*5",
+        "craftCeiling": 596727994.5,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "SCYLLA",
+        "attributes": {},
+        "enchantments": {
+          "bane_of_arthropods": 6,
+          "impaling": 5,
+          "luck": 5,
+          "critical": 6,
+          "cleave": 5,
+          "looting": 3,
+          "smite": 5,
+          "syphon": 3,
+          "scavenger": 3,
+          "ender_slayer": 5,
+          "vampirism": 5,
+          "experience": 3,
+          "execute": 5,
+          "giant_killer": 6,
+          "first_strike": 4,
+          "venomous": 5,
+          "dragon_hunter": 5,
+          "sharpness": 6,
+          "cubism": 5,
+          "champion": 10,
+          "lethality": 6
+        },
+        "scrolls": [],
+        "reforge": "fabled",
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 6,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {
+          "hpb": 10
+        },
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "SCYLLA*6",
+        "craftCeiling": 614327994.5,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "SCYLLA",
+        "attributes": {},
+        "enchantments": {
+          "bane_of_arthropods": 6,
+          "impaling": 5,
+          "luck": 5,
+          "critical": 6,
+          "cleave": 5,
+          "looting": 3,
+          "smite": 5,
+          "syphon": 3,
+          "scavenger": 3,
+          "ender_slayer": 5,
+          "vampirism": 5,
+          "experience": 3,
+          "execute": 5,
+          "giant_killer": 6,
+          "first_strike": 4,
+          "venomous": 5,
+          "dragon_hunter": 5,
+          "sharpness": 6,
+          "cubism": 5,
+          "champion": 10,
+          "lethality": 6
+        },
+        "scrolls": [],
+        "reforge": "fabled",
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 8,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {
+          "hpb": 10
+        },
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "SCYLLA*8",
+        "craftCeiling": 680327994.5,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "SCYLLA",
+        "attributes": {},
+        "enchantments": {
+          "bane_of_arthropods": 6,
+          "impaling": 5,
+          "luck": 5,
+          "critical": 6,
+          "cleave": 5,
+          "looting": 3,
+          "smite": 5,
+          "syphon": 3,
+          "scavenger": 3,
+          "ender_slayer": 5,
+          "vampirism": 5,
+          "experience": 3,
+          "execute": 5,
+          "giant_killer": 6,
+          "first_strike": 4,
+          "venomous": 5,
+          "dragon_hunter": 5,
+          "sharpness": 6,
+          "cubism": 5,
+          "champion": 10,
+          "lethality": 6
+        },
+        "scrolls": [],
+        "reforge": "fabled",
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 10,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {
+          "hpb": 10
+        },
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "SCYLLA*10",
+        "craftCeiling": 935527994.5000001,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "SCYLLA",
+        "attributes": {},
+        "enchantments": {
+          "bane_of_arthropods": 6,
+          "impaling": 5,
+          "luck": 5,
+          "critical": 6,
+          "cleave": 5,
+          "looting": 3,
+          "smite": 5,
+          "syphon": 3,
+          "scavenger": 3,
+          "ender_slayer": 5,
+          "vampirism": 5,
+          "experience": 3,
+          "execute": 5,
+          "giant_killer": 6,
+          "first_strike": 4,
+          "venomous": 5,
+          "dragon_hunter": 5,
+          "sharpness": 6,
+          "cubism": 5,
+          "champion": 10,
+          "lethality": 6
+        },
+        "scrolls": [],
+        "reforge": "fabled",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 10,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {
+          "hpb": 10
+        },
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "SCYLLA*10",
+        "craftCeiling": 942127994.5000001,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "SCYLLA",
+        "attributes": {},
+        "enchantments": {
+          "bane_of_arthropods": 6,
+          "impaling": 5,
+          "luck": 5,
+          "critical": 6,
+          "cleave": 5,
+          "looting": 3,
+          "smite": 5,
+          "syphon": 3,
+          "scavenger": 3,
+          "ender_slayer": 5,
+          "vampirism": 5,
+          "experience": 3,
+          "execute": 5,
+          "giant_killer": 6,
+          "first_strike": 4,
+          "venomous": 5,
+          "dragon_hunter": 5,
+          "sharpness": 6,
+          "cubism": 5,
+          "champion": 10,
+          "lethality": 6
+        },
+        "scrolls": [
+          "IMPLOSION_SCROLL",
+          "SHADOW_WARP_SCROLL",
+          "WITHER_SHIELD_SCROLL"
+        ],
+        "reforge": "fabled",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 10,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {
+          "hpb": 10
+        },
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "SCYLLA*10",
+        "craftCeiling": 1338127994.5,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "SUPERIOR_DRAGON_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": null,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "8a2a7254-d22e-4d7d-9bca-baf8d56e9531"
+      },
+      "output": {
+        "baseKey": "SUPERIOR_DRAGON_CHESTPLATE",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 7700000
+      }
+    },
+    {
+      "input": {
+        "id": "SUPERIOR_DRAGON_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 0,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "8a2a7254-d22e-4d7d-9bca-baf8d56e9531"
+      },
+      "output": {
+        "baseKey": "SUPERIOR_DRAGON_CHESTPLATE*0",
+        "craftCeiling": null,
+        "zeroStarBaseline": 8000000,
+        "baseValueForId": 7700000
+      }
+    },
+    {
+      "input": {
+        "id": "SUPERIOR_DRAGON_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 1,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "8a2a7254-d22e-4d7d-9bca-baf8d56e9531"
+      },
+      "output": {
+        "baseKey": "SUPERIOR_DRAGON_CHESTPLATE*1",
+        "craftCeiling": 9900000,
+        "zeroStarBaseline": 8000000,
+        "baseValueForId": 7700000
+      }
+    },
+    {
+      "input": {
+        "id": "SUPERIOR_DRAGON_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 5,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "8a2a7254-d22e-4d7d-9bca-baf8d56e9531"
+      },
+      "output": {
+        "baseKey": "SUPERIOR_DRAGON_CHESTPLATE*5",
+        "craftCeiling": 14300000.000000002,
+        "zeroStarBaseline": 8000000,
+        "baseValueForId": 7700000
+      }
+    },
+    {
+      "input": {
+        "id": "SUPERIOR_DRAGON_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 6,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "8a2a7254-d22e-4d7d-9bca-baf8d56e9531"
+      },
+      "output": {
+        "baseKey": "SUPERIOR_DRAGON_CHESTPLATE*6",
+        "craftCeiling": 31900000.000000004,
+        "zeroStarBaseline": 8000000,
+        "baseValueForId": 7700000
+      }
+    },
+    {
+      "input": {
+        "id": "SUPERIOR_DRAGON_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 8,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "8a2a7254-d22e-4d7d-9bca-baf8d56e9531"
+      },
+      "output": {
+        "baseKey": "SUPERIOR_DRAGON_CHESTPLATE*8",
+        "craftCeiling": 97900000.00000001,
+        "zeroStarBaseline": 8000000,
+        "baseValueForId": 7700000
+      }
+    },
+    {
+      "input": {
+        "id": "SUPERIOR_DRAGON_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 10,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "8a2a7254-d22e-4d7d-9bca-baf8d56e9531"
+      },
+      "output": {
+        "baseKey": "SUPERIOR_DRAGON_CHESTPLATE*10",
+        "craftCeiling": 353100000,
+        "zeroStarBaseline": 8000000,
+        "baseValueForId": 7700000
+      }
+    },
+    {
+      "input": {
+        "id": "SUPERIOR_DRAGON_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 10,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "8a2a7254-d22e-4d7d-9bca-baf8d56e9531"
+      },
+      "output": {
+        "baseKey": "SUPERIOR_DRAGON_CHESTPLATE*10",
+        "craftCeiling": 361614000,
+        "zeroStarBaseline": 15740000,
+        "baseValueForId": 7700000
+      }
+    },
+    {
+      "input": {
+        "id": "SUPERIOR_DRAGON_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [
+          "IMPLOSION_SCROLL",
+          "SHADOW_WARP_SCROLL",
+          "WITHER_SHIELD_SCROLL"
+        ],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 10,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "8a2a7254-d22e-4d7d-9bca-baf8d56e9531"
+      },
+      "output": {
+        "baseKey": "SUPERIOR_DRAGON_CHESTPLATE*10",
+        "craftCeiling": 353100000,
+        "zeroStarBaseline": 8000000,
+        "baseValueForId": 7700000
+      }
+    },
+    {
+      "input": {
+        "id": "TERROR_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": null,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "25a667d0-0d8a-460a-95a5-0ca72e88ca9b"
+      },
+      "output": {
+        "baseKey": "TERROR_CHESTPLATE",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 290000
+      }
+    },
+    {
+      "input": {
+        "id": "TERROR_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 0,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "25a667d0-0d8a-460a-95a5-0ca72e88ca9b"
+      },
+      "output": {
+        "baseKey": "TERROR_CHESTPLATE*0",
+        "craftCeiling": null,
+        "zeroStarBaseline": 440000,
+        "baseValueForId": 290000
+      }
+    },
+    {
+      "input": {
+        "id": "TERROR_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 1,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "25a667d0-0d8a-460a-95a5-0ca72e88ca9b"
+      },
+      "output": {
+        "baseKey": "TERROR_CHESTPLATE*1",
+        "craftCeiling": 1584000.0000000002,
+        "zeroStarBaseline": 440000,
+        "baseValueForId": 290000
+      }
+    },
+    {
+      "input": {
+        "id": "TERROR_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 5,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "25a667d0-0d8a-460a-95a5-0ca72e88ca9b"
+      },
+      "output": {
+        "baseKey": "TERROR_CHESTPLATE*5",
+        "craftCeiling": 5984000.000000001,
+        "zeroStarBaseline": 440000,
+        "baseValueForId": 290000
+      }
+    },
+    {
+      "input": {
+        "id": "TERROR_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 6,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "25a667d0-0d8a-460a-95a5-0ca72e88ca9b"
+      },
+      "output": {
+        "baseKey": "TERROR_CHESTPLATE*6",
+        "craftCeiling": 23584000.000000004,
+        "zeroStarBaseline": 440000,
+        "baseValueForId": 290000
+      }
+    },
+    {
+      "input": {
+        "id": "TERROR_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 8,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "25a667d0-0d8a-460a-95a5-0ca72e88ca9b"
+      },
+      "output": {
+        "baseKey": "TERROR_CHESTPLATE*8",
+        "craftCeiling": 89584000,
+        "zeroStarBaseline": 440000,
+        "baseValueForId": 290000
+      }
+    },
+    {
+      "input": {
+        "id": "TERROR_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 10,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "25a667d0-0d8a-460a-95a5-0ca72e88ca9b"
+      },
+      "output": {
+        "baseKey": "TERROR_CHESTPLATE*10",
+        "craftCeiling": 344784000,
+        "zeroStarBaseline": 440000,
+        "baseValueForId": 290000
+      }
+    },
+    {
+      "input": {
+        "id": "TERROR_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 10,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "25a667d0-0d8a-460a-95a5-0ca72e88ca9b"
+      },
+      "output": {
+        "baseKey": "TERROR_CHESTPLATE*10",
+        "craftCeiling": 344739998.90000004,
+        "zeroStarBaseline": 399999,
+        "baseValueForId": 290000
+      }
+    },
+    {
+      "input": {
+        "id": "TERROR_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [
+          "IMPLOSION_SCROLL",
+          "SHADOW_WARP_SCROLL",
+          "WITHER_SHIELD_SCROLL"
+        ],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 10,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": "25a667d0-0d8a-460a-95a5-0ca72e88ca9b"
+      },
+      "output": {
+        "baseKey": "TERROR_CHESTPLATE*10",
+        "craftCeiling": 344739998.90000004,
+        "zeroStarBaseline": 399999,
+        "baseValueForId": 290000
+      }
+    },
+    {
+      "input": {
+        "id": "DIVAN_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {
+          "ultimate_wisdom": 5,
+          "rejuvenate": 5,
+          "protection": 5,
+          "growth": 7,
+          "ice_cold": 3
+        },
+        "scrolls": [],
+        "reforge": "jaded",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": null,
+        "gemSlots": 5,
+        "gems": [
+          "ROUGH_AMBER",
+          "ROUGH_AMBER",
+          "ROUGH_JADE",
+          "ROUGH_JADE",
+          "ROUGH_TOPAZ"
+        ],
+        "parts": [],
+        "extras": {
+          "divan_powder": 1
+        },
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "DIVAN_CHESTPLATE",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 24600000
+      }
+    },
+    {
+      "input": {
+        "id": "DIVAN_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {
+          "ultimate_wisdom": 5,
+          "rejuvenate": 5,
+          "protection": 5,
+          "growth": 7,
+          "ice_cold": 3
+        },
+        "scrolls": [],
+        "reforge": "jaded",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 0,
+        "gemSlots": 5,
+        "gems": [
+          "ROUGH_AMBER",
+          "ROUGH_AMBER",
+          "ROUGH_JADE",
+          "ROUGH_JADE",
+          "ROUGH_TOPAZ"
+        ],
+        "parts": [],
+        "extras": {
+          "divan_powder": 1
+        },
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "DIVAN_CHESTPLATE*0",
+        "craftCeiling": null,
+        "zeroStarBaseline": 98974000,
+        "baseValueForId": 24600000
+      }
+    },
+    {
+      "input": {
+        "id": "DIVAN_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {
+          "ultimate_wisdom": 5,
+          "rejuvenate": 5,
+          "protection": 5,
+          "growth": 7,
+          "ice_cold": 3
+        },
+        "scrolls": [],
+        "reforge": "jaded",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 1,
+        "gemSlots": 5,
+        "gems": [
+          "ROUGH_AMBER",
+          "ROUGH_AMBER",
+          "ROUGH_JADE",
+          "ROUGH_JADE",
+          "ROUGH_TOPAZ"
+        ],
+        "parts": [],
+        "extras": {
+          "divan_powder": 1
+        },
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "DIVAN_CHESTPLATE*1",
+        "craftCeiling": 109971400.00000001,
+        "zeroStarBaseline": 98974000,
+        "baseValueForId": 24600000
+      }
+    },
+    {
+      "input": {
+        "id": "DIVAN_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {
+          "ultimate_wisdom": 5,
+          "rejuvenate": 5,
+          "protection": 5,
+          "growth": 7,
+          "ice_cold": 3
+        },
+        "scrolls": [],
+        "reforge": "jaded",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 5,
+        "gemSlots": 5,
+        "gems": [
+          "ROUGH_AMBER",
+          "ROUGH_AMBER",
+          "ROUGH_JADE",
+          "ROUGH_JADE",
+          "ROUGH_TOPAZ"
+        ],
+        "parts": [],
+        "extras": {
+          "divan_powder": 1
+        },
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "DIVAN_CHESTPLATE*5",
+        "craftCeiling": 114371400.00000001,
+        "zeroStarBaseline": 98974000,
+        "baseValueForId": 24600000
+      }
+    },
+    {
+      "input": {
+        "id": "DIVAN_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {
+          "ultimate_wisdom": 5,
+          "rejuvenate": 5,
+          "protection": 5,
+          "growth": 7,
+          "ice_cold": 3
+        },
+        "scrolls": [],
+        "reforge": "jaded",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 6,
+        "gemSlots": 5,
+        "gems": [
+          "ROUGH_AMBER",
+          "ROUGH_AMBER",
+          "ROUGH_JADE",
+          "ROUGH_JADE",
+          "ROUGH_TOPAZ"
+        ],
+        "parts": [],
+        "extras": {
+          "divan_powder": 1
+        },
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "DIVAN_CHESTPLATE*6",
+        "craftCeiling": 131971400.00000001,
+        "zeroStarBaseline": 98974000,
+        "baseValueForId": 24600000
+      }
+    },
+    {
+      "input": {
+        "id": "DIVAN_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {
+          "ultimate_wisdom": 5,
+          "rejuvenate": 5,
+          "protection": 5,
+          "growth": 7,
+          "ice_cold": 3
+        },
+        "scrolls": [],
+        "reforge": "jaded",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 8,
+        "gemSlots": 5,
+        "gems": [
+          "ROUGH_AMBER",
+          "ROUGH_AMBER",
+          "ROUGH_JADE",
+          "ROUGH_JADE",
+          "ROUGH_TOPAZ"
+        ],
+        "parts": [],
+        "extras": {
+          "divan_powder": 1
+        },
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "DIVAN_CHESTPLATE*8",
+        "craftCeiling": 197971400.00000003,
+        "zeroStarBaseline": 98974000,
+        "baseValueForId": 24600000
+      }
+    },
+    {
+      "input": {
+        "id": "DIVAN_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {
+          "ultimate_wisdom": 5,
+          "rejuvenate": 5,
+          "protection": 5,
+          "growth": 7,
+          "ice_cold": 3
+        },
+        "scrolls": [],
+        "reforge": "jaded",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 10,
+        "gemSlots": 5,
+        "gems": [
+          "ROUGH_AMBER",
+          "ROUGH_AMBER",
+          "ROUGH_JADE",
+          "ROUGH_JADE",
+          "ROUGH_TOPAZ"
+        ],
+        "parts": [],
+        "extras": {
+          "divan_powder": 1
+        },
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "DIVAN_CHESTPLATE*10",
+        "craftCeiling": 453171400.00000006,
+        "zeroStarBaseline": 98974000,
+        "baseValueForId": 24600000
+      }
+    },
+    {
+      "input": {
+        "id": "DIVAN_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {
+          "ultimate_wisdom": 5,
+          "rejuvenate": 5,
+          "protection": 5,
+          "growth": 7,
+          "ice_cold": 3
+        },
+        "scrolls": [],
+        "reforge": "jaded",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 10,
+        "gemSlots": 5,
+        "gems": [
+          "ROUGH_AMBER",
+          "ROUGH_AMBER",
+          "ROUGH_JADE",
+          "ROUGH_JADE",
+          "ROUGH_TOPAZ"
+        ],
+        "parts": [],
+        "extras": {
+          "divan_powder": 1
+        },
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "DIVAN_CHESTPLATE*10",
+        "craftCeiling": 453171400.00000006,
+        "zeroStarBaseline": 98974000,
+        "baseValueForId": 24600000
+      }
+    },
+    {
+      "input": {
+        "id": "DIVAN_CHESTPLATE",
+        "attributes": {},
+        "enchantments": {
+          "ultimate_wisdom": 5,
+          "rejuvenate": 5,
+          "protection": 5,
+          "growth": 7,
+          "ice_cold": 3
+        },
+        "scrolls": [
+          "IMPLOSION_SCROLL",
+          "SHADOW_WARP_SCROLL",
+          "WITHER_SHIELD_SCROLL"
+        ],
+        "reforge": "jaded",
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 10,
+        "gemSlots": 5,
+        "gems": [
+          "ROUGH_AMBER",
+          "ROUGH_AMBER",
+          "ROUGH_JADE",
+          "ROUGH_JADE",
+          "ROUGH_TOPAZ"
+        ],
+        "parts": [],
+        "extras": {
+          "divan_powder": 1
+        },
+        "pet": null,
+        "variant": ""
+      },
+      "output": {
+        "baseKey": "DIVAN_CHESTPLATE*10",
+        "craftCeiling": 372900000.00000006,
+        "zeroStarBaseline": 26000000,
+        "baseValueForId": 24600000
+      }
+    },
+    {
+      "input": {
+        "id": "UNKNOWN_STARRED_ITEM",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": null,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": null
+      },
+      "output": {
+        "baseKey": "UNKNOWN_STARRED_ITEM",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "UNKNOWN_STARRED_ITEM",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 0,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": null
+      },
+      "output": {
+        "baseKey": "UNKNOWN_STARRED_ITEM*0",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "UNKNOWN_STARRED_ITEM",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 1,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": null
+      },
+      "output": {
+        "baseKey": "UNKNOWN_STARRED_ITEM*1",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "UNKNOWN_STARRED_ITEM",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 5,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": null
+      },
+      "output": {
+        "baseKey": "UNKNOWN_STARRED_ITEM*5",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "UNKNOWN_STARRED_ITEM",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 6,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": null
+      },
+      "output": {
+        "baseKey": "UNKNOWN_STARRED_ITEM*6",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "UNKNOWN_STARRED_ITEM",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 8,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": null
+      },
+      "output": {
+        "baseKey": "UNKNOWN_STARRED_ITEM*8",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "UNKNOWN_STARRED_ITEM",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 10,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": null
+      },
+      "output": {
+        "baseKey": "UNKNOWN_STARRED_ITEM*10",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "UNKNOWN_STARRED_ITEM",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 10,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": null
+      },
+      "output": {
+        "baseKey": "UNKNOWN_STARRED_ITEM*10",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "UNKNOWN_STARRED_ITEM",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [
+          "IMPLOSION_SCROLL",
+          "SHADOW_WARP_SCROLL",
+          "WITHER_SHIELD_SCROLL"
+        ],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 10,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": null
+      },
+      "output": {
+        "baseKey": "UNKNOWN_STARRED_ITEM*10",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "NECRON_BLADE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": null,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": null
+      },
+      "output": {
+        "baseKey": "NECRON_BLADE",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "NECRON_BLADE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 0,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": null
+      },
+      "output": {
+        "baseKey": "NECRON_BLADE*0",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "NECRON_BLADE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 1,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": null
+      },
+      "output": {
+        "baseKey": "NECRON_BLADE*1",
+        "craftCeiling": 551759994.5,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "NECRON_BLADE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 5,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": null
+      },
+      "output": {
+        "baseKey": "NECRON_BLADE*5",
+        "craftCeiling": 556159994.5,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "NECRON_BLADE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 6,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": null
+      },
+      "output": {
+        "baseKey": "NECRON_BLADE*6",
+        "craftCeiling": 573759994.5,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "NECRON_BLADE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 8,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": null
+      },
+      "output": {
+        "baseKey": "NECRON_BLADE*8",
+        "craftCeiling": 639759994.5,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "NECRON_BLADE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 10,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": null
+      },
+      "output": {
+        "baseKey": "NECRON_BLADE*10",
+        "craftCeiling": 894959994.5000001,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "NECRON_BLADE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 10,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": null
+      },
+      "output": {
+        "baseKey": "NECRON_BLADE*10",
+        "craftCeiling": 901559994.5000001,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "NECRON_BLADE",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [
+          "IMPLOSION_SCROLL",
+          "SHADOW_WARP_SCROLL",
+          "WITHER_SHIELD_SCROLL"
+        ],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": true,
+        "upgradeLevel": 10,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": null
+      },
+      "output": {
+        "baseKey": "NECRON_BLADE*10",
+        "craftCeiling": 1297559994.5,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "MISC_CLEAN_ITEM",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": null,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": null
+      },
+      "output": {
+        "baseKey": "MISC_CLEAN_ITEM",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "PET",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 8,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": {
+          "type": "ENDER_DRAGON",
+          "tier": "LEGENDARY",
+          "exp": 25000000,
+          "candied": false,
+          "heldItem": null,
+          "skin": null
+        },
+        "variant": "",
+        "itemUuid": null
+      },
+      "output": {
+        "baseKey": "PET:ENDER_DRAGON:LEGENDARY:l90",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    },
+    {
+      "input": {
+        "id": "ENCHANTED_BOOK",
+        "attributes": {},
+        "enchantments": {},
+        "scrolls": [],
+        "reforge": null,
+        "skin": null,
+        "recombobulated": false,
+        "upgradeLevel": 5,
+        "gemSlots": 0,
+        "gems": [],
+        "parts": [],
+        "extras": {},
+        "pet": null,
+        "variant": "",
+        "itemUuid": null
+      },
+      "output": {
+        "baseKey": "BOOK:plain",
+        "craftCeiling": null,
+        "zeroStarBaseline": null,
+        "baseValueForId": 0
+      }
+    }
+  ]
+}

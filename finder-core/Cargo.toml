@@ -1,0 +1,25 @@
+[package]
+name = "finder-core"
+version = "0.1.0"
+edition = "2021"
+
+# Phase 2 domain core — a behavioral clone of baf-flip-finder's money core,
+# pinned to goldens/. NBT decode uses simdnbt (SIMD, ~1.30x faster than fastnbt in
+# the local head-to-head); requires the nightly pin in ../rust-toolchain.toml.
+# Behavior is fixed by the golden tests regardless of parser.
+# (release profile is set at the workspace root.)
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+# preserve_order: serde_json::Value must keep JSON object key order so query-input
+# attrs feed candidateFeatures in the same order the TS Object.entries did.
+serde_json = { version = "1", features = ["preserve_order"] }
+base64 = "0.22"
+# zlib-rs backend: inflate was 85% of decode_item_bytes (9.4us of 11.3us per
+# auction). Pure Rust, so the musl static build needs no C toolchain.
+flate2 = { version = "1", default-features = false, features = ["zlib-rs"] }
+simdnbt = "0.10"
+# insertion-ordered maps: candidateFeatures/sigSignature output order must match
+# the TS Object.entries (JSON/NBT) order, which BTreeMap would re-sort.
+indexmap = { version = "2", features = ["serde"] }
+# fast (non-DoS-resistant) hasher for the money-core maps — PORT.md-sanctioned.
+rustc-hash = "2"

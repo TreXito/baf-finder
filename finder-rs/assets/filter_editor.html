@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BAF Filter Editor</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+         background:#0f1115; color:#e6e6e6; }
+  code, .mono, input, textarea { font-family: ui-monospace, "Cascadia Code", Menlo, Consolas, monospace; }
+  header { padding:14px 18px; background:#161a22; border-bottom:1px solid #262c38;
+           display:flex; align-items:center; gap:14px; flex-wrap:wrap; position:sticky; top:0; z-index:5; }
+  header h1 { font-size:16px; margin:0; font-weight:600; }
+  .pill { font-size:12px; padding:3px 9px; border-radius:999px; background:#222; }
+  .pill.on { background:#12351f; color:#5fdd8b; }
+  .pill.off { background:#3a2418; color:#f0a875; }
+  main { padding:16px 18px; max-width:1080px; margin:0 auto; }
+  .bar { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:14px; }
+  button { font-family:inherit; font-size:13px; padding:8px 13px; border-radius:7px; border:1px solid #333a49;
+           background:#1d2230; color:#e6e6e6; cursor:pointer; }
+  button:hover { background:#262d3d; }
+  button.primary { background:#1f6feb; border-color:#1f6feb; color:#fff; }
+  button.primary:hover { background:#2b7bf5; }
+  button.sm { padding:4px 9px; font-size:12px; }
+  button.danger { color:#f3a6a6; border-color:#5a3030; background:#221518; }
+  button.danger:hover { background:#2c1a1e; }
+  input, textarea { font-size:13px; border-radius:7px; border:1px solid #333a49; background:#12151c; color:#e6e6e6; }
+  input[type=text] { padding:7px 10px; }
+  textarea { width:100%; height:58vh; resize:vertical; line-height:1.45; padding:12px;
+             background:#0b0d12; color:#dfe6ee; white-space:pre; tab-size:2; }
+  .seg { display:inline-flex; border:1px solid #333a49; border-radius:7px; overflow:hidden; }
+  .seg button { border:none; border-radius:0; background:#12151c; }
+  .seg button.active { background:#1f6feb; color:#fff; }
+  .card { background:#12151c; border:1px solid #262c38; border-radius:11px; padding:14px 16px; margin-bottom:14px; }
+  .card > h2 { font-size:13px; margin:0 0 12px; color:#9fb3c8; font-weight:600; letter-spacing:.02em; text-transform:uppercase; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px 14px; }
+  .fld { display:flex; flex-direction:column; gap:4px; }
+  .fld label { font-size:11px; color:#8a97a8; }
+  .fld input { width:100%; }
+  .fld .hint { font-size:10px; color:#5c6675; }
+  .item { border:1px solid #262c38; border-radius:11px; margin-bottom:12px; background:#12151c; overflow:hidden; }
+  .item > summary { list-style:none; cursor:pointer; padding:11px 14px; display:flex; align-items:center; gap:10px;
+                    background:#151a23; user-select:none; }
+  .item > summary::-webkit-details-marker { display:none; }
+  .item[open] > summary { border-bottom:1px solid #262c38; }
+  .item .key { font-family:ui-monospace,monospace; font-size:13px; color:#e6b673; font-weight:600; }
+  .item .count { font-size:11px; color:#7f8b9c; }
+  .item .body { padding:12px 14px; }
+  .chev { transition:transform .12s; color:#6f7c8d; }
+  .item[open] .chev { transform:rotate(90deg); }
+  .tier { border:1px solid #2a3140; border-radius:9px; padding:12px; margin-bottom:10px; background:#0f131a; }
+  .tier .row { display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+  .tier select, .adv input { font-family:inherit; font-size:13px; padding:6px 9px; border-radius:7px;
+                   border:1px solid #333a49; background:#12151c; color:#e6e6e6; }
+  .adv { margin-top:8px; }
+  .adv summary { cursor:pointer; font-size:12px; color:#8a97a8; }
+  .adv input { width:100%; margin-top:6px; }
+  .adv input.bad { border-color:#7a2d2d; }
+  .spacer { flex:1 1 auto; }
+  .muted { color:#6f7c8d; font-size:12px; }
+  #status { margin-top:12px; padding:10px 12px; border-radius:8px; font-size:13px; min-height:20px;
+            background:#12151c; border:1px solid #262c38; white-space:pre-wrap; }
+  #status.ok { border-color:#1e5b34; color:#8fe6ab; }
+  #status.err { border-color:#7a2d2d; color:#f3a6a6; }
+  #search { width:220px; }
+  details.ref { margin-top:16px; background:#12151c; border:1px solid #262c38; border-radius:9px; padding:8px 14px; }
+  details.ref summary { cursor:pointer; font-size:13px; color:#9fb3c8; }
+  details.ref pre { font-size:12px; overflow-x:auto; color:#c8d2dc; }
+  .hidden { display:none !important; }
+</style></head><body>
+<header>
+  <h1>🎣 BAF Filter Editor</h1>
+  <span id="active" class="pill">checking…</span>
+  <span class="spacer"></span>
+  <div class="seg" role="tablist">
+    <button id="mForm" class="active">Form</button>
+    <button id="mJson">Raw JSON</button>
+  </div>
+  <input type="text" id="token" placeholder="edit token (if set)" autocomplete="off" style="width:150px">
+</header>
+<main>
+  <div class="bar">
+    <button class="primary" id="save">💾 Save &amp; Apply</button>
+    <button id="load">↻ Reload</button>
+    <button id="download">⬇ Download</button>
+    <button id="uploadBtn">⬆ Upload</button>
+    <input type="file" id="file" accept="application/json,.json" style="display:none">
+    <span class="spacer"></span>
+    <input type="text" id="search" placeholder="🔎 filter items…" autocomplete="off">
+  </div>
+
+  <!-- FORM MODE -->
+  <div id="formView">
+    <div class="card">
+      <h2>Global gates <span class="muted" style="text-transform:none">— every flip must clear all four</span></h2>
+      <div class="grid" id="globals"></div>
+    </div>
+    <div class="bar" style="margin-bottom:8px">
+      <strong style="font-size:13px;color:#9fb3c8">Item rules</strong>
+      <span class="muted" id="itemCount"></span>
+      <span class="spacer"></span>
+      <button class="sm" id="addItem">+ Add item</button>
+    </div>
+    <div id="items"></div>
+  </div>
+
+  <!-- RAW JSON MODE -->
+  <div id="jsonView" class="hidden">
+    <div class="bar"><button class="sm" id="format">{ } Format</button>
+      <span class="muted">Raw edit. Switching back to Form re-parses this.</span></div>
+    <textarea id="editor" spellcheck="false" class="mono" placeholder="Loading…"></textarea>
+  </div>
+
+  <div id="status"></div>
+
+  <details class="ref">
+    <summary>Filter format reference (BinMaster-compatible)</summary>
+<pre>A flip must clear the four global gates, must NOT hit a matching Blacklist tier,
+and must match >=1 Consider tier (its matcher matches AND every set min_* holds).
+The highest-priority matching Consider tier's scale_price sets the listing price.
+
+Item keys: item id (HYPERION, MIDAS_SWORD), pets as PET_&lt;TYPE&gt;, or GLOBAL (all items).
+Consider fields are all optional — a blank field is simply not gated.
+"max sell" is shown in HOURS here; stored as ms (86.4M / volume-per-day estimate).
+matcher {} matches everything; fields resolve to enchant levels, kuudra attributes,
+stars, gem_slots, recombobulated (0/1). e.g. {"double_hook":{"Number":{"Equal":[1]}}}.
+Anything the form does not model (exotic matchers, extra keys) is preserved on save;
+use Raw JSON mode for those.</pre>
+  </details>
+</main>
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const st = $('status'), ed = $('editor');
+let model = { item_specific_filters: {} };   // source of truth
+let mode = 'form';
+
+function setStatus(msg, cls) { st.textContent = msg; st.className = cls || ''; }
+
+/* ---------- number helpers ---------- */
+function fmtCoins(n) {
+  if (n === null || n === undefined || n === '') return '';
+  const a = Math.abs(n);
+  const trim = (x) => parseFloat(x.toFixed(3)).toString();
+  if (a >= 1e9) return trim(n / 1e9) + 'B';
+  if (a >= 1e6) return trim(n / 1e6) + 'M';
+  if (a >= 1e3) return trim(n / 1e3) + 'K';
+  return trim(n);
+}
+function parseCoins(s) {
+  s = (s || '').trim().toLowerCase().replace(/,/g, '');
+  if (s === '') return null;
+  const m = s.match(/^(-?[\d.]+)\s*([kmb]?)$/);
+  if (!m) return NaN;
+  const mult = { '': 1, k: 1e3, m: 1e6, b: 1e9 }[m[2]];
+  return Math.round(parseFloat(m[1]) * mult);
+}
+const fmtHours = (ms) => (ms === null || ms === undefined || ms === '') ? '' : parseFloat((ms / 3600000).toFixed(4)).toString();
+function parseHours(s) { s = (s || '').trim(); if (s === '') return null; const v = parseFloat(s); return isNaN(v) ? NaN : Math.round(v * 3600000); }
+function fmtPlain(n) { return (n === null || n === undefined || n === '') ? '' : String(n); }
+function parsePlain(s) { s = (s || '').trim(); if (s === '') return null; const v = parseFloat(s); return isNaN(v) ? NaN : v; }
+
+const KIND = {
+  coins: { fmt: fmtCoins, parse: parseCoins },
+  hours: { fmt: fmtHours, parse: parseHours },
+  plain: { fmt: fmtPlain, parse: parsePlain },
+};
+
+/* ---------- tiny DOM helper ---------- */
+function el(tag, props, ...kids) {
+  const n = document.createElement(tag);
+  if (props) for (const k in props) {
+    if (k === 'class') n.className = props[k];
+    else if (k === 'html') n.innerHTML = props[k];
+    else if (k.startsWith('on')) n[k] = props[k];
+    else if (k in n) n[k] = props[k]; else n.setAttribute(k, props[k]);
+  }
+  for (const c of kids) if (c != null) n.append(c.nodeType ? c : document.createTextNode(c));
+  return n;
+}
+
+/* A labelled numeric field bound to obj[key]; blank deletes the key. */
+function numField(label, hint, obj, key, kind) {
+  const K = KIND[kind];
+  const input = el('input', { type: 'text', class: 'mono', value: K.fmt(obj[key]), inputmode: 'decimal' });
+  input.onblur = () => {
+    const v = K.parse(input.value);
+    if (v !== null && (typeof v !== 'number' || isNaN(v))) { input.classList.add('bad'); setStatus('“' + input.value + '” is not a valid number for ' + label, 'err'); return; }
+    input.classList.remove('bad');
+    if (v === null) delete obj[key]; else obj[key] = v;
+    input.value = K.fmt(v);
+    if (st.className === 'err') setStatus('');
+  };
+  return el('div', { class: 'fld' }, el('label', null, label), input, hint ? el('span', { class: 'hint' }, hint) : null);
+}
+
+/* ---------- rendering ---------- */
+function renderGlobals() {
+  const g = $('globals'); g.textContent = '';
+  g.append(
+    numField('Min profit', 'coins, e.g. 25M', model, 'global_min_profit', 'coins'),
+    numField('Min ROI %', 'percent', model, 'global_min_profit_percent', 'plain'),
+    numField('Min volume', 'sales/day', model, 'global_min_volume', 'plain'),
+    numField('Min confidence', '0 – 1', model, 'global_min_confidence', 'plain'),
+  );
+}
+
+function tierTypeOf(rule) { return (rule.filter_type && rule.filter_type.Consider !== undefined) ? 'Consider' : (rule.filter_type && 'Blacklist' in rule.filter_type) ? 'Blacklist' : 'Consider'; }
+
+function renderTier(itemKey, idx) {
+  const rules = model.item_specific_filters[itemKey];
+  const rule = rules[idx];
+  const type = tierTypeOf(rule);
+  const wrap = el('div', { class: 'tier' });
+
+  const typeSel = el('select', {
+    onchange: () => {
+      if (typeSel.value === 'Blacklist') rule.filter_type = { Blacklist: null };
+      else rule.filter_type = { Consider: (rule.filter_type && rule.filter_type.Consider) || {} };
+      renderItemsKeepOpen();
+    }
+  }, el('option', { value: 'Consider', selected: type === 'Consider' }, 'Consider'),
+     el('option', { value: 'Blacklist', selected: type === 'Blacklist' }, 'Blacklist (reject)'));
+
+  const scaleInput = el('input', { type: 'text', class: 'mono', value: fmtPlain(rule.scale_price), style: 'width:90px', inputmode: 'decimal', title: 'list price = value × scale' });
+  scaleInput.onblur = () => { const v = parsePlain(scaleInput.value); if (v === null) delete rule.scale_price; else rule.scale_price = v; scaleInput.value = fmtPlain(v); };
+
+  const row = el('div', { class: 'row' },
+    typeSel,
+    el('div', { class: 'fld', style: 'flex-direction:row;align-items:center;gap:6px' }, el('label', { style: 'font-size:12px' }, 'scale price'), scaleInput),
+    el('span', { class: 'spacer' }),
+    el('button', { class: 'sm danger', onclick: () => { rules.splice(idx, 1); if (!rules.length) delete model.item_specific_filters[itemKey]; renderItemsKeepOpen(); } }, '✕ tier'));
+  wrap.append(row);
+
+  if (type === 'Consider') {
+    const c = rule.filter_type.Consider || (rule.filter_type.Consider = {});
+    wrap.append(el('div', { class: 'grid' },
+      numField('Min profit', 'coins', c, 'min_profit', 'coins'),
+      numField('Min ROI %', 'percent', c, 'min_profit_percent', 'plain'),
+      numField('Min volume', 'sales/day', c, 'min_volume', 'plain'),
+      numField('Min confidence', '0 – 1', c, 'min_confidence', 'plain'),
+      numField('Max sell', 'hours', c, 'max_time_to_sell', 'hours'),
+      numField('Priority', 'higher wins', c, 'priority', 'plain'),
+    ));
+  } else {
+    wrap.append(el('div', { class: 'muted', style: 'margin-bottom:6px' }, 'Rejects any item matching the matcher below. scale_price is ignored.'));
+  }
+
+  // matcher (advanced)
+  const matStr = JSON.stringify(rule.matcher || {});
+  const matInput = el('input', { type: 'text', class: 'mono', value: matStr, spellcheck: false });
+  matInput.oninput = () => {
+    try { const v = JSON.parse(matInput.value); if (typeof v !== 'object' || Array.isArray(v)) throw 0; rule.matcher = v; matInput.classList.remove('bad'); }
+    catch { matInput.classList.add('bad'); }
+  };
+  const adv = el('details', { class: 'adv' }, el('summary', null, 'matcher ' + (matStr === '{}' ? '(matches all)' : '· ' + matStr)),
+    matInput, el('div', { class: 'hint', style: 'margin-top:4px' }, 'JSON object, e.g. {"double_hook":{"Number":{"Equal":[1]}}}. {} = all.'));
+  if (type === 'Blacklist' && matStr !== '{}') adv.open = true;
+  wrap.append(adv);
+  return wrap;
+}
+
+function renderItem(itemKey) {
+  const rules = model.item_specific_filters[itemKey];
+  const det = el('details', { class: 'item' });
+  det.dataset.key = itemKey;
+
+  const keyInput = el('input', { type: 'text', class: 'mono key', value: itemKey, style: 'width:auto;min-width:140px;background:transparent;border:1px solid transparent',
+    onclick: (e) => e.stopPropagation(),
+    onchange: () => {
+      const nk = keyInput.value.trim();
+      if (!nk || nk === itemKey) { keyInput.value = itemKey; return; }
+      if (model.item_specific_filters[nk]) { setStatus('An item “' + nk + '” already exists.', 'err'); keyInput.value = itemKey; return; }
+      // rebuild preserving order
+      const rebuilt = {};
+      for (const k in model.item_specific_filters) rebuilt[k === itemKey ? nk : k] = model.item_specific_filters[k];
+      model.item_specific_filters = rebuilt;
+      renderItems();
+    } });
+
+  det.append(el('summary', null,
+    el('span', { class: 'chev' }, '▶'),
+    keyInput,
+    el('span', { class: 'count' }, rules.length + ' tier' + (rules.length === 1 ? '' : 's')),
+    el('span', { class: 'spacer' }),
+    el('button', { class: 'sm', onclick: (e) => { e.preventDefault(); e.stopPropagation(); rules.push({ filter_type: { Consider: {} }, matcher: {}, scale_price: 1 }); det.open = true; renderItemsKeepOpen(); } }, '+ tier'),
+    el('button', { class: 'sm danger', onclick: (e) => { e.preventDefault(); e.stopPropagation(); if (confirm('Delete all rules for ' + itemKey + '?')) { delete model.item_specific_filters[itemKey]; renderItems(); } } }, '✕')
+  ));
+
+  const body = el('div', { class: 'body' });
+  rules.forEach((_, i) => body.append(renderTier(itemKey, i)));
+  det.append(body);
+  return det;
+}
+
+function currentFilterText() { return (($('search').value || '').trim().toLowerCase()); }
+
+function renderItems() {
+  const box = $('items'); const openKeys = new Set([...box.querySelectorAll('.item[open]')].map(d => d.dataset.key));
+  box.textContent = '';
+  const keys = Object.keys(model.item_specific_filters);
+  keys.sort((a, b) => (a === 'GLOBAL' ? -1 : b === 'GLOBAL' ? 1 : a.localeCompare(b)));
+  const f = currentFilterText();
+  let shown = 0;
+  for (const k of keys) {
+    if (f && !k.toLowerCase().includes(f)) continue;
+    const it = renderItem(k);
+    if (openKeys.has(k) || (f && k.toLowerCase().includes(f))) it.open = true;
+    box.append(it); shown++;
+  }
+  $('itemCount').textContent = shown + (f ? ' shown / ' + keys.length + ' total' : ' item' + (keys.length === 1 ? '' : 's'));
+  if (!shown) box.append(el('div', { class: 'muted' }, f ? 'No items match “' + f + '”.' : 'No item rules. Add one, or rely on the global gates.'));
+}
+// re-render items but keep the currently-open ones open (used after in-place tier edits)
+function renderItemsKeepOpen() { renderItems(); }
+
+function render() {
+  if (mode === 'form') { $('formView').classList.remove('hidden'); $('jsonView').classList.add('hidden'); renderGlobals(); renderItems(); }
+  else { $('formView').classList.add('hidden'); $('jsonView').classList.remove('hidden'); ed.value = JSON.stringify(model, null, 2); }
+}
+
+/* ---------- mode switching ---------- */
+function toModel() {
+  // pull the authoritative model from whichever view is active
+  if (mode === 'json') {
+    const parsed = JSON.parse(ed.value); // throws on bad json
+    if (!parsed || typeof parsed.item_specific_filters !== 'object' || Array.isArray(parsed.item_specific_filters))
+      throw new Error('missing "item_specific_filters" object');
+    model = parsed;
+  }
+  return model;
+}
+function switchMode(next) {
+  if (next === mode) return;
+  try { toModel(); } catch (e) { setStatus('Fix the JSON before switching: ' + e.message, 'err'); return; }
+  mode = next;
+  $('mForm').classList.toggle('active', mode === 'form');
+  $('mJson').classList.toggle('active', mode === 'json');
+  $('search').classList.toggle('hidden', mode === 'json');
+  render();
+  if (st.className === 'err') setStatus('');
+}
+
+/* ---------- server I/O ---------- */
+async function refreshActive() {
+  try {
+    const r = await fetch('filter.json', { cache: 'no-store' });
+    const txt = await r.text(); let active = false;
+    try { active = !!JSON.parse(txt).item_specific_filters; } catch {}
+    const e = $('active'); e.textContent = active ? 'filter ACTIVE' : 'no filter file'; e.className = 'pill ' + (active ? 'on' : 'off');
+  } catch {}
+}
+async function load() {
+  try {
+    const r = await fetch('filter.json', { cache: 'no-store' });
+    const txt = await r.text();
+    model = JSON.parse(txt);
+    if (typeof model.item_specific_filters !== 'object' || Array.isArray(model.item_specific_filters)) model.item_specific_filters = {};
+    render(); setStatus('Loaded current filter from server.', 'ok'); refreshActive();
+  } catch (e) { setStatus('Load failed: ' + e, 'err'); }
+}
+async function save() {
+  let text;
+  try { toModel(); text = JSON.stringify(model, null, 2); }
+  catch (e) { setStatus('Not saved — ' + e.message, 'err'); return; }
+  const tok = $('token').value.trim();
+  try {
+    const r = await fetch('filter.json' + (tok ? ('?token=' + encodeURIComponent(tok)) : ''),
+      { method: 'PUT', headers: { 'content-type': 'application/json' }, body: text });
+    const j = await r.json();
+    if (j.ok) { setStatus('✅ Saved and applied — filter is now ' + (j.active ? 'ACTIVE.' : 'off.'), 'ok'); refreshActive(); }
+    else setStatus('❌ Rejected by server: ' + j.error, 'err');
+  } catch (e) { setStatus('Save failed (auth? network?): ' + e, 'err'); }
+}
+function download() {
+  let text; try { toModel(); text = JSON.stringify(model, null, 2); } catch (e) { setStatus('Cannot download — ' + e.message, 'err'); return; }
+  const a = el('a', { href: URL.createObjectURL(new Blob([text], { type: 'application/json' })), download: 'binmaster-filter.json' });
+  a.click(); URL.revokeObjectURL(a.href);
+}
+
+/* ---------- wire up ---------- */
+$('save').onclick = save;
+$('load').onclick = load;
+$('download').onclick = download;
+$('format').onclick = () => { try { ed.value = JSON.stringify(JSON.parse(ed.value), null, 2); setStatus('Formatted.', 'ok'); } catch (e) { setStatus('Invalid JSON: ' + e, 'err'); } };
+$('mForm').onclick = () => switchMode('form');
+$('mJson').onclick = () => switchMode('json');
+$('addItem').onclick = () => {
+  let name = (prompt('New item id (e.g. HYPERION, PET_ENDER_DRAGON, or GLOBAL):') || '').trim();
+  if (!name) return;
+  if (model.item_specific_filters[name]) { setStatus('“' + name + '” already exists.', 'err'); return; }
+  model.item_specific_filters[name] = [{ filter_type: { Consider: {} }, matcher: {}, scale_price: 1 }];
+  $('search').value = ''; renderItems();
+  const d = $('items').querySelector('.item[data-key="' + name.replace(/"/g, '\\"') + '"]'); if (d) { d.open = true; d.scrollIntoView({ block: 'center' }); }
+};
+$('search').oninput = () => renderItems();
+$('uploadBtn').onclick = () => $('file').click();
+$('file').onchange = (e) => {
+  const f = e.target.files[0]; if (!f) return;
+  const rd = new FileReader();
+  rd.onload = () => { try { model = JSON.parse(rd.result); if (typeof model.item_specific_filters !== 'object') throw new Error('missing item_specific_filters'); render(); setStatus('Loaded “' + f.name + '” — review, then Save & Apply.', 'ok'); } catch (err) { setStatus('Bad file: ' + err, 'err'); } };
+  rd.readAsText(f);
+};
+document.addEventListener('keydown', (e) => { if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); save(); } });
+load();
+</script>
+</body></html>

@@ -1,0 +1,9 @@
+# Pinned to nightly for simdnbt (SIMD NBT decode needs `#![feature(portable_simd)]`).
+# User-approved 2026-07-13 after a 1.30x-faster head-to-head vs fastnbt.
+# DATED pin (2026-07-16): a rolling `channel = "nightly"` made rustup chase the
+# newest nightly on every deploy build. Inside clux/muslrust that update path hit
+# a cross-device rename and aborted the build (BUILD_EXIT=1, stale artifact). A
+# dated channel is used as-is with no update/rollback, so deploy builds are
+# reproducible. Matches the nightly baked into the pinned muslrust image.
+[toolchain]
+channel = "nightly"

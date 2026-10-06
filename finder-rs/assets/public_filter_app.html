@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Flip feed &middot; filter</title>
+<style>
+  :root {
+    --ground:#F1F3F6; --surface:#FFFFFF; --sunken:#E7EAEF;
+    --ink:#14171D; --body:#2B313B; --muted:#616B7A;
+    --line:#D6DBE3; --line-soft:#E4E8EE;
+    --accent:#A25E0B; --accent-bg:#F6EBD9;
+    --ok:#1F6B45; --ok-bg:#E1F0E8;
+    --bad:#8A3324; --bad-bg:#F7E6E1;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ground:#14171D; --surface:#1A1E26; --sunken:#0F1218;
+      --ink:#EDF0F5; --body:#C3CAD6; --muted:#8A94A4;
+      --line:#2C333F; --line-soft:#232935;
+      --accent:#E5A94F; --accent-bg:#2E2415;
+      --ok:#6FBF95; --ok-bg:#16281F;
+      --bad:#E08A75; --bad-bg:#2E1C18;
+    }
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;padding:0 1.25rem 5rem;background:var(--ground);color:var(--body);
+    font-family:var(--mono);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:44rem;margin:0 auto}
+  header{padding:3rem 0 1.5rem;border-bottom:1px solid var(--line);margin-bottom:2rem}
+  .eyebrow{font-size:.7rem;text-transform:uppercase;letter-spacing:.16em;color:var(--accent);margin:0 0 .6rem}
+  h1{font-size:1.5rem;font-weight:600;color:var(--ink);margin:0 0 .4rem;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:.85rem;margin:0}
+  h2{font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600;margin:2rem 0 .8rem}
+  label{display:block;font-size:.8rem;color:var(--ink);margin-bottom:.3rem}
+  .hint{display:block;font-size:.72rem;color:var(--muted);margin-top:.25rem;line-height:1.45}
+  textarea{
+    width:100%;font-family:var(--mono);font-size:.78rem;line-height:1.5;padding:.6rem .7rem;
+    background:var(--sunken);color:var(--ink);border:1px solid var(--line);border-radius:5px;
+    resize:vertical;min-height:8rem;
+  }
+  textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .chip.on{background:var(--ok-bg);color:var(--ok)}
+  input[type=text],input[type=number],input[type=password]{
+    width:100%;font-family:var(--mono);font-size:.88rem;padding:.5rem .65rem;
+    background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:5px;
+  }
+  input:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr))}
+  .field{min-width:0}
+  fieldset{border:1px solid var(--line);border-radius:6px;padding:1rem;margin:0 0 1rem;background:var(--surface)}
+  legend{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:0 .4rem}
+  .row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+  button{
+    font-family:var(--mono);font-size:.82rem;font-weight:600;cursor:pointer;
+    padding:.55rem 1rem;border-radius:5px;border:1px solid var(--line);
+    background:var(--surface);color:var(--ink);
+  }
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) button.primary{color:#14171D}}
+  button:disabled{opacity:.5;cursor:not-allowed}
+  .msg{margin:1rem 0 0;padding:.7rem .9rem;border-radius:5px;font-size:.82rem;display:none}
+  .msg.show{display:block}
+  .msg.ok{background:var(--ok-bg);color:var(--ok)}
+  .msg.bad{background:var(--bad-bg);color:var(--bad)}
+  .chip{display:inline-block;font-size:.7rem;padding:.15rem .5rem;border-radius:3px;background:var(--accent-bg);color:var(--accent);margin-right:.35rem}
+  .note{background:var(--sunken);border-left:3px solid var(--accent);padding:.8rem 1rem;border-radius:0 5px 5px 0;font-size:.82rem;margin:0 0 1.5rem}
+  .whobar{
+    display:flex;gap:1rem;align-items:center;justify-content:space-between;flex-wrap:wrap;
+    background:var(--surface);border:1px solid var(--line);border-radius:6px;
+    padding:.75rem .9rem;margin:0 0 1.5rem;
+  }
+  .whobar strong{color:var(--ink);font-size:.95rem}
+  #app{display:none}
+  footer{margin-top:3rem;padding-top:1.25rem;border-top:1px solid var(--line);font-size:.75rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">baf-finder</p>
+  <h1>Your flip filter</h1>
+  <p class="sub">Each key has its own filter. Yours is applied to every connection that key opens, including the mod.</p>
+</header>
+
+<!-- Sign in -->
+<section id="gate">
+  <p class="note">Paste the key you connect with. It is kept in this browser only and sent as a header, never in a URL.</p>
+  <label for="key">Feed key</label>
+  <input id="key" type="password" autocomplete="off" spellcheck="false" placeholder="your key">
+  <div class="row" style="margin-top:.8rem">
+    <button class="primary" id="signin">Unlock</button>
+    <label style="font-size:.78rem;color:var(--muted);display:flex;gap:.35rem;align-items:center;margin:0">
+      <input type="checkbox" id="remember" checked style="width:auto"> remember on this device
+    </label>
+  </div>
+  <div class="msg bad" id="gatemsg"></div>
+</section>
+
+<!-- Editor -->
+<section id="app">
+  <div class="note">
+    <strong>This feed only carries flips the finder turned down.</strong>
+    Thresholds at or above its owner's would return almost nothing, because everything here
+    already failed those. Looser is the useful direction.
+  </div>
+
+  <div class="whobar">
+    <div>
+      <span class="hint" style="margin:0">signed in as</span>
+      <div><strong id="who"></strong></div>
+      <span class="hint" style="margin:0">receiving <span id="buckets"></span> <span id="pricing"></span></span>
+    </div>
+    <button type="button" id="switch">Use a different key</button>
+  </div>
+
+  <form id="form">
+    <fieldset>
+      <legend>Money</legend>
+      <div class="grid">
+        <div class="field">
+          <label for="minProfit">Min profit</label>
+          <input id="minProfit" type="number" min="0" step="10000">
+          <span class="hint">Coins. The single most useful dial. <span id="floorNote"></span></span>
+        </div>
+        <div class="field">
+          <label for="minRoiPct">Min ROI %</label>
+          <input id="minRoiPct" type="number" min="0" step="1">
+          <span class="hint">Profit as a share of price. 300k on a 200k item is 150.</span>
+        </div>
+        <div class="field">
+          <label for="minPrice">Min price</label>
+          <input id="minPrice" type="number" min="0" step="10000">
+          <span class="hint">0 for no floor.</span>
+        </div>
+        <div class="field">
+          <label for="maxPrice">Max price</label>
+          <input id="maxPrice" type="number" min="0" step="10000">
+          <span class="hint">Cap what one flip ties up. 0 for no ceiling.</span>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Risk</legend>
+      <div class="grid">
+        <div class="field">
+          <label for="minConfidence">Min confidence</label>
+          <input id="minConfidence" type="number" min="0" max="1" step="0.05">
+          <span class="hint">0 to 1. Under 0.5 the valuation is thin.</span>
+        </div>
+        <div class="field">
+          <label for="minVolumePerDay">Min sales per day</label>
+          <input id="minVolumePerDay" type="number" min="0" step="0.5">
+          <span class="hint">Liquidity. Under 1 you may hold it for days.</span>
+        </div>
+        <div class="field">
+          <label for="blockedGuards">Blocked guards</label>
+          <input id="blockedGuards" type="text" placeholder="manipulated, stale">
+          <span class="hint">Comma separated. Keep <code>manipulated</code>.</span>
+        </div>
+        <div class="field">
+          <label for="finders">Only these finders</label>
+          <input id="finders" type="text" placeholder="empty = all">
+          <span class="hint">median, model, snipe, lbin.</span>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Items</legend>
+      <div class="grid">
+        <div class="field">
+          <label for="allowIds">Only these item ids</label>
+          <input id="allowIds" type="text" placeholder="empty = all">
+          <span class="hint">e.g. <code>HYPERION, PET_GOLDEN_DRAGON</code></span>
+        </div>
+        <div class="field">
+          <label for="blacklistIds">Never these item ids</label>
+          <input id="blacklistIds" type="text" placeholder="empty = none">
+          <span class="hint">Wins over the allow list.</span>
+        </div>
+        <div class="field">
+          <label for="buckets_in">Only these buckets</label>
+          <input id="buckets_in" type="text" placeholder="empty = all you receive">
+          <span class="hint"><code>flood</code> alone = only flips that passed his quality bar.</span>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Tier filter</legend>
+      <p class="hint" style="margin:0 0 .8rem">
+        Thresholds above are one bar for everything. A tier filter sets the bar <em>per liquidity band
+        and per item</em>, e.g. 3M profit on something selling 10 a day but 30M on a 0.5-a-day item,
+        plus rules for named items. This is the same engine the finder runs on itself.
+      </p>
+      <div class="row" style="margin-bottom:.6rem">
+        <button type="button" id="pullowner">Pull the owner's filter</button>
+        <button type="button" id="pickfile">Upload a .json</button>
+        <button type="button" id="template">Load a starter</button>
+        <button type="button" id="clearbin">Turn off</button>
+        <span id="binstate" class="chip">off</span>
+        <input type="file" id="file" accept=".json,application/json" style="display:none">
+      </div>
+      <label style="font-weight:normal;color:var(--muted);font-size:.75rem;display:flex;gap:.35rem;align-items:center;margin:0 0 .7rem">
+        <input type="checkbox" id="exact" style="width:auto"> pull his numbers exactly, without loosening them
+      </label>
+      <label for="bin">Filter document</label>
+      <textarea id="bin" rows="12" spellcheck="false" placeholder="Paste a BinMaster filter, or leave empty to use the thresholds above only."></textarea>
+      <span class="hint">Checked before it is saved. If it is rejected, nothing changes and your current filter keeps running.</span>
+      <div class="row" style="margin-top:.7rem">
+        <button type="button" class="primary" id="savebin">Save tier filter</button>
+      </div>
+      <div class="msg" id="binmsg"></div>
+    </fieldset>
+
+    <div class="row">
+      <button class="primary" id="save" type="submit">Save thresholds</button>
+      <button type="button" id="reset">Restore default</button>
+    </div>
+    <div class="msg" id="msg"></div>
+  </form>
+
+  <footer>
+    A save takes effect immediately on any connection you already have open, no reconnect needed.
+  </footer>
+</section>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var LS = "flipfeed.key";
+  var key = null;
+  var $ = function (id) { return document.getElementById(id); };
+  var NUMS = ["minProfit","minRoiPct","minConfidence","minVolumePerDay","minPrice","maxPrice"];
+  var LISTS = { blacklistIds:"blacklistIds", allowIds:"allowIds", blockedGuards:"blockedGuards",
+                finders:"finders", buckets:"buckets_in" };
+
+  function say(el, text, good) {
+    el.textContent = text;
+    el.className = "msg show " + (good ? "ok" : "bad");
+    if (good) { setTimeout(function(){ el.className = "msg"; }, 4000); }
+  }
+  function splitList(s) {
+    return s.split(",").map(function (x) { return x.trim(); }).filter(Boolean);
+  }
+  function api(path, method, body) {
+    // Resolve the method BEFORE deciding on a body. Testing the raw argument was
+    // wrong: the load path calls api("/api/filter") with no method, so it read as
+    // "not GET" and fetch refused the request outright ("GET Request cannot have
+    // a body"), which broke the page before it could show anything.
+    var m = method || "GET";
+    var init = {
+      method: m,
+      headers: { "Authorization": "Bearer " + key, "Content-Type": "application/json" }
+    };
+    // An explicit null body is meaningful: it is how the tier filter is cleared.
+    if (m !== "GET" && m !== "HEAD") {
+      init.body = JSON.stringify(body === undefined ? null : body);
+    }
+    return fetch(path, init).then(function (r) {
+      return r.json().catch(function () { return { ok:false, error:"server sent something unreadable" }; })
+        .then(function (j) { return { status:r.status, body:j }; });
+    });
+  }
+  var STARTER = {
+    global_min_profit: 500000,
+    global_min_profit_percent: 5,
+    global_min_volume: 0.5,
+    global_min_confidence: 0.5,
+    item_specific_filters: {
+      GLOBAL: [
+        { filter_type: { Consider: { min_profit: 500000, min_profit_percent: 5,
+            min_volume: 10, min_confidence: 0.6, priority: 10 } },
+          matcher: {}, scale_price: 0.95 },
+        { filter_type: { Consider: { min_profit: 2000000, min_profit_percent: 8,
+            min_volume: 1, min_confidence: 0.6, priority: 8 } },
+          matcher: {}, scale_price: 0.95 }
+      ]
+    }
+  };
+
+  function setBinState(active) {
+    var el = $("binstate");
+    el.textContent = active ? "active" : "off";
+    el.className = "chip" + (active ? " on" : "");
+  }
+
+  function fill(f) {
+    NUMS.forEach(function (n) { $(n).value = f[n] != null ? f[n] : 0; });
+    Object.keys(LISTS).forEach(function (n) { $(LISTS[n]).value = (f[n] || []).join(", "); });
+  }
+  function read() {
+    var out = {};
+    NUMS.forEach(function (n) { out[n] = parseFloat($(n).value) || 0; });
+    Object.keys(LISTS).forEach(function (n) { out[n] = splitList($(LISTS[n]).value); });
+    return out;
+  }
+
+  function load() {
+    return api("/api/filter").then(function (r) {
+      if (r.status === 401) { throw new Error("That key was not accepted."); }
+      if (!r.body.ok) { throw new Error(r.body.error || "Could not load your filter."); }
+      var b = r.body;
+      $("who").textContent = b.label;
+      $("buckets").textContent = b.buckets.join(" + ");
+      $("pricing").textContent = b.allowPricing ? "· inventory pricing on" : "· inventory pricing off";
+      $("floorNote").textContent = b.minProfitFloor > 0
+        ? "Your key floors this at " + b.minProfitFloor.toLocaleString() + "."
+        : "";
+      fill(b.filter);
+      $("bin").value = b.binmaster ? JSON.stringify(b.binmaster, null, 2) : "";
+      setBinState(!!b.binmaster);
+      window.__default = b["default"];
+      $("gate").style.display = "none";
+      $("app").style.display = "block";
+    });
+  }
+
+  $("signin").addEventListener("click", function () {
+    key = $("key").value.trim();
+    if (!key) { say($("gatemsg"), "Enter your key first.", false); return; }
+    load().then(function () {
+      if ($("remember").checked) { try { localStorage.setItem(LS, key); } catch (e) {} }
+    }).catch(function (e) { say($("gatemsg"), e.message, false); });
+  });
+
+  $("form").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    $("save").disabled = true;
+    api("/api/filter", "PUT", read()).then(function (r) {
+      if (r.body.ok) {
+        say($("msg"), "Saved. " + (r.body.appliedTo > 0
+          ? "Applied to " + r.body.appliedTo + " open connection" + (r.body.appliedTo === 1 ? "" : "s") + "."
+          : "It will apply the next time you connect."), true);
+      } else {
+        say($("msg"), r.body.error || "Could not save that.", false);
+      }
+    }).catch(function () { say($("msg"), "Could not reach the server.", false); })
+      .then(function () { $("save").disabled = false; });
+  });
+
+  $("pickfile").addEventListener("click", function () { $("file").click(); });
+  $("file").addEventListener("change", function (ev) {
+    var f = ev.target.files && ev.target.files[0];
+    if (!f) { return; }
+    var r = new FileReader();
+    r.onload = function () {
+      $("bin").value = r.result;
+      say($("binmsg"), "Loaded " + f.name + ". Press Save tier filter to apply it.", true);
+    };
+    r.onerror = function () { say($("binmsg"), "Could not read that file.", false); };
+    r.readAsText(f);
+    ev.target.value = "";
+  });
+
+  $("pullowner").addEventListener("click", function () {
+    var exact = $("exact").checked;
+    api("/api/owner-filter").then(function (r) {
+      if (!r.body.ok) { say($("binmsg"), r.body.error || "Could not pull it.", false); return; }
+      var doc = exact ? r.body.exact : r.body.loosened;
+      $("bin").value = JSON.stringify(doc, null, 2);
+      say($("binmsg"), exact
+        ? "Pulled the owner's filter exactly, " + r.body.rules + " rules. Heads up: this feed only carries what that filter REJECTED, so as-is it will match almost nothing. Press Save tier filter to use it anyway."
+        : "Pulled the owner's filter with the floors dropped into this feed's range, " + r.body.rules + " rules. Edit if you like, then press Save tier filter.",
+        true);
+    }).catch(function () { say($("binmsg"), "Could not reach the server.", false); });
+  });
+
+  $("template").addEventListener("click", function () {
+    $("bin").value = JSON.stringify(STARTER, null, 2);
+    say($("binmsg"), "Starter loaded. Edit it, then press Save tier filter.", true);
+  });
+
+  $("clearbin").addEventListener("click", function () {
+    api("/api/binmaster", "PUT", null).then(function (r) {
+      if (r.body.ok) { $("bin").value = ""; setBinState(false); say($("binmsg"), "Tier filter turned off. Your thresholds still apply.", true); }
+      else { say($("binmsg"), r.body.error || "Could not turn it off.", false); }
+    });
+  });
+
+  $("savebin").addEventListener("click", function () {
+    var text = $("bin").value.trim();
+    if (!text) { say($("binmsg"), "Nothing to save. Use Turn off to remove the current one.", false); return; }
+    var doc;
+    try { doc = JSON.parse(text); }
+    catch (e) { say($("binmsg"), "That is not valid JSON: " + e.message, false); return; }
+    $("savebin").disabled = true;
+    api("/api/binmaster", "PUT", doc).then(function (r) {
+      if (r.body.ok) {
+        setBinState(r.body.active);
+        say($("binmsg"), "Saved " + r.body.rules + " rule" + (r.body.rules === 1 ? "" : "s") + ". " +
+          (r.body.appliedTo > 0 ? "Applied to " + r.body.appliedTo + " open connection" + (r.body.appliedTo === 1 ? "" : "s") + "." : "It will apply next time you connect."), true);
+      } else {
+        say($("binmsg"), r.body.error || "Could not save that.", false);
+      }
+    }).catch(function () { say($("binmsg"), "Could not reach the server.", false); })
+      .then(function () { $("savebin").disabled = false; });
+  });
+
+  $("reset").addEventListener("click", function () {
+    api("/api/reset", "POST").then(function (r) {
+      if (r.body.ok) {
+        fill(r.body.filter); $("bin").value = ""; setBinState(false);
+        say($("msg"), "Default restored: thresholds reset and the tier filter turned off.", true);
+      }
+      else { say($("msg"), r.body.error || "Could not reset.", false); }
+    });
+  });
+
+  $("switch").addEventListener("click", function () {
+    // Forget the remembered key and go back to the unlock screen. Each person
+    // has their own key, and their filter follows the key, not the browser.
+    try { localStorage.removeItem(LS); } catch (e) {}
+    location.reload();
+  });
+
+  try {
+    var stored = localStorage.getItem(LS);
+    if (stored) { key = stored; load().catch(function () { $("key").value = ""; }); }
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>

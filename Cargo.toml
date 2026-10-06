@@ -1,0 +1,11 @@
+[workspace]
+resolver = "2"
+members = ["finder-core", "finder-rs"]
+
+# finder-rs (the binary crate, Phase 3) and finder-shadow-rs (Phase 1, separate
+# tree) are added as members when their phases begin. finder-core is the Phase 2
+# domain-core library, fixture-exact against goldens/.
+
+[profile.release]
+lto = true
+codegen-units = 1

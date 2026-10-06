@@ -1,0 +1,17 @@
+/target
+/data
+**/node_modules
+ts-oracle/dist
+
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite.gz
+*.db
+*.log
+compare*.err
+compare*.embed
+
+.env
+.env.*
+*.pem
