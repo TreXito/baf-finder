@@ -389,14 +389,16 @@ async fn post_cofl_compare(
     }
 }
 
-/// Spawns the flip API. Mirrors index.ts:271 (FLIP_API_HOST default 0.0.0.0,
-/// FLIP_API_PORT default 15100).
+/// Spawns the flip API. Mirrors index.ts:271 (FLIP_API_PORT default 15100),
+/// except the public release binds loopback by default instead of 0.0.0.0:
+/// /filter is an editable control surface, so it must not listen on every
+/// interface unless the operator deliberately sets FLIP_API_HOST.
 pub async fn serve(st: Arc<FlipApiState>) -> std::io::Result<()> {
     let port: u16 = std::env::var("FLIP_API_PORT")
         .ok()
         .and_then(|s| s.parse().ok())
         .unwrap_or(15100);
-    let host = std::env::var("FLIP_API_HOST").unwrap_or_else(|_| "0.0.0.0".into());
+    let host = std::env::var("FLIP_API_HOST").unwrap_or_else(|_| "127.0.0.1".into());
     let listener = TcpListener::bind((host.as_str(), port)).await?;
     tracing_port(port);
     loop {

@@ -2,6 +2,8 @@
 name = "finder-core"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+repository = "https://github.com/TreXito/baf-finder"
 
 # Phase 2 domain core — a behavioral clone of baf-flip-finder's money core,
 # pinned to goldens/. NBT decode uses simdnbt (SIMD, ~1.30x faster than fastnbt in

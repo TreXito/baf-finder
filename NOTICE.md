@@ -18,10 +18,11 @@ offline regression testing only, and are not themselves a dataset or a
 product.
 
 No Coflnet proprietary data, subscription feeds or paid APIs are consumed or
-bundled. Auction links in flip payloads point at `sky.coflnet.com` as a
-courtesy to their price-tracking site; the websocket flip-feed protocol shape
-is modeled after the one commonly used in the SkyBlock flipping ecosystem for
-client compatibility.
+bundled. The websocket flip-feed protocol the feed server speaks is a
+behavioral port of Coflnet's flip feed protocol, for client compatibility;
+the optional auction-fee model (`AH_FEE_COFL=1`) is a port of their fee
+math; auction links in flip payloads point at `sky.coflnet.com` as a
+courtesy to their price-tracking site. Not affiliated with Coflnet.
 
 ## Usage
 

@@ -2,6 +2,9 @@
 name = "finder-rs"
 version = "0.1.0"
 edition = "2021"
+default-run = "finder-rs"
+license = "MIT"
+repository = "https://github.com/TreXito/baf-finder"
 
 # Phase 3 binary crate. Boots from the prod sqlite snapshot, builds the money
 # core (finder-core) on real data, and — as later chunks land — sweeps the API,

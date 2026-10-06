@@ -1546,7 +1546,7 @@ fn serve_loop(
         eprintln!(
             "flip API filter editor: {}",
             if admin_password.is_empty() {
-                "⚠️  UNAUTHENTICATED (ADMIN_PASSWORD unset — /filter is open; set it to the baf-backend admin password)"
+                "⚠️  UNAUTHENTICATED (ADMIN_PASSWORD unset — /filter is open; set ADMIN_PASSWORD to require HTTP Basic auth)"
             } else {
                 "password-protected (HTTP Basic, ADMIN_PASSWORD)"
             }

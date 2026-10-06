@@ -38,6 +38,8 @@ Lower `RETENTION_DAYS` to trade reference depth for memory.
 What you get by default:
 
 - `127.0.0.1:15101` websocket flip feed (clients: welcome, flips, estimates)
+- `127.0.0.1:15100` HTTP filter editor API (set `ADMIN_PASSWORD` if you
+  expose it)
 - flips also logged as `FLIP` lines to stderr
 - ended auctions collected every ~55 s, price index rebuilt every 10 min
 
@@ -108,20 +110,26 @@ Main env knobs (defaults in parentheses):
 Every model constant in `finder-core/src/config.rs` (`MIN_MARGIN`,
 `MIN_PROFIT`, `MIN_REFS`, `ATTR_MIN_SHARE`, `RETENTION_DAYS`, `LIQ_DISCOUNT`
 and many more) is also env-overridable; the doc comments there explain each
-one. The finder deliberately default to a *conservative* configuration.
+one. The finder deliberately defaults to a *conservative* configuration.
 
 Sold-through, time-to-sell and other survival statistics are estimated with
 Kaplan-Meier so censored (expired unsold) listings are not misread as sales.
 
-### Extra surfaces (all disabled / loopback by default)
+### Extra surfaces
 
-- **Public key-gated ws feed**: `PUBLIC_WS=1`, `PUBLIC_WS_PORT` (15102),
-  `PUBLIC_WS_KEYS_PATH` (`./data/public-keys.json`). Keys are SHA-256 hashed
-  on load; a `finder-rs/src/bin/public_key.rs` helper generates them.
-- **HTTP flip API / filter editor**: `FLIP_API_PORT` (15100). Set
-  `ADMIN_PASSWORD` or the `/filter` panel is unauthenticated on whatever
-  interface it binds.
+- **HTTP flip API / filter editor**: starts with SERVE on
+  `127.0.0.1:15100` (`FLIP_API_HOST` / `FLIP_API_PORT`). If you expose it
+  (`FLIP_API_HOST=0.0.0.0`), set `ADMIN_PASSWORD` or `/filter` is an open
+  control surface.
+- **Public key-gated ws feed**: off unless `PUBLIC_WS=1`; `PUBLIC_WS_PORT`
+  (15102), `PUBLIC_WS_KEYS_PATH` (`./data/public-keys.json`). Keys are
+  SHA-256 hashed on load; a `finder-rs/src/bin/public_key.rs` helper
+  generates them.
 - **Seller follow** and related collectors: see `finder-rs/src/*.rs` headers.
+
+The flip feed is the same protocol the
+[frikadellen-baf](https://github.com/TreXito/frikadellen-baf-121) mod family
+consumes, so existing feed clients work against a self-hosted finder.
 
 ## Testing
 
@@ -135,11 +143,12 @@ captured from live data. It runs fully offline.
 
 ## Credits / legal
 
-- **[Coflnet](https://coflnet.com)**: the websocket flip-feed protocol used by
-  the SkyBlock flipping community, auction links rendered in flip payloads
-  (`sky.coflnet.com`), and the ecosystem this finder is modeled to be
-  compatible with. Not affiliated; no Coflnet proprietary data or paid feeds
-  are used by this repository in any way.
+- **[Coflnet](https://coflnet.com)**: three concrete things this repo takes
+  from them: the flip-feed websocket protocol the feed server speaks
+  (welcome / flip / estimate / purse / listed), the optional Hypixel
+  auction-fee model behind `AH_FEE_COFL=1` (a port of their fee math), and
+  the `sky.coflnet.com` links flip payloads carry for auction context. Not
+  affiliated; no Coflnet API, data or paid feed is used anywhere.
 - **Hypixel / Mojang**: all auction and bazaar data comes from the public
   Hypixel API endpoints. Hypixel SkyBlock © Hypixel. This project is not
   affiliated with or endorsed by Hypixel, Mojang or Microsoft, and it is not
