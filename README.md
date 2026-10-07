@@ -162,4 +162,14 @@ captured from live data. It runs fully offline.
 API from many IPs will get you blocked (and ruins it for everyone). Hooking
 the feed up to account automation is against Hypixel's rules and will get
 those accounts banned; that choice and those consequences are yours. No
-warranty; MIT licensed, see `LICENSE`. Data attribution details in `NOTICE`.
+warranty. Data attribution details in `NOTICE`.
+
+## License
+
+**AGPL-3.0-only**, see `LICENSE`. Practical translation: run it, study it,
+change it, self-host it. If you hand the software to others, or run a
+modified copy as a network service (a hosted flip feed counts), you must
+offer those people the source of your modified version under the same
+license. Nobody can fold this finder into a closed product. You cannot
+sell a modified copy without passing the same freedoms, and the source,
+on to whoever you sell or serve it to.
